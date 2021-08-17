@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
+    <title>Создать урок</title>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div class="d-flex flex-row justify-content-center min-vh-100" style="background: #1a1e21">
+    <div class="w-25 my-5 p-5 h-auto" style="background: #f0f0f0">
+        <h1 class="text-center">Создать урок</h1>
+        <form th:object="${lessonDto}" th:method="post" th:action="@{/lesson}">
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{courseId}">
+            <div class="my-6 mx-3">
+                <div class="form-group mb-4">
+                    <label class="mb-2" for="title">Название урока</label>
+                    <input type="text" class="form-control" id="title" th:field="*{title}"
+                           placeholder="Название урока">
+                    <label th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+                           style="font-size: small; color: #bb2d3b">
+                        Название урока должно быть заполнено
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="mb-2" for="text">Текст урока</label>
+                    <textarea type="text" rows="20" cols="30" class="form-control" id="text"
+                              th:field="*{text}" placeholder="Текст урока"></textarea>
+                    <label th:if="${#fields.hasErrors('text')}" th:errors="*{text}"
+                           style="font-size: small; color: #bb2d3b">
+                        Текст урока должен быть заполнен
+                    </label>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn mt-2" type="submit" sec:authorize="hasRole('ADMIN')"
+                            style="background: #0dcaf0">Сохранить
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:href="@{/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

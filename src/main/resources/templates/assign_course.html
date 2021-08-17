@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
+    <title>Назначить курс</title>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div class="d-flex flex-row justify-content-center min-vh-100" style="background: #1a1e21">
+    <div class="w-25 my-5 p-5 h-auto" style="background: #f0f0f0">
+        <h1 class="text-center">Назначить курс</h1>
+        <form th:method="post" th:action="@{/course/{courseId}/assign(courseId = ${courseId})}">
+            <div class="my-6 mx-3">
+                <div class="form-group mb-4">
+                    <label class="mb-2" for="userId">Выберите пользователя</label>
+                    <select class="form-select" id="userId" name="userId">
+                        <option th:each="user : ${users}"
+                                th:value="${user.id}"
+                                th:text="${user.username}">
+                            Имя пользователя
+                        </option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn mt-2" type="submit" style="background: #0dcaf0">Назначить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:href="@{/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

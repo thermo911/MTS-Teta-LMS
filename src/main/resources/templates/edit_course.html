@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
+    <title>Редактировать курс</title>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div class="d-flex flex-row justify-content-center min-vh-100" style="background: #1a1e21">
+    <div class="w-50 my-5 p-5 h-auto" style="background: #f0f0f0">
+        <h1 class="text-center">Редактировать курс</h1>
+        <form th:object="${courseDto}" th:method="post" th:action="@{/course}">
+            <input type="hidden" th:field="*{id}">
+            <div class="my-6 mx-3">
+                <div class="form-group mb-4">
+                    <label class="mb-2" for="courseName">Название</label>
+                    <input type="text" class="form-control" id="courseName" placeholder="Course name"
+                           th:field="*{title}">
+                    <label th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+                           style="font-size: small; color: #bb2d3b">Название курса должно быть
+                        заполнено</label>
+                </div>
+                <div class="form-group mb-4">
+                    <label class="mb-2" for="authorName">Автор</label>
+                    <input type="text" class="form-control" id="authorName" placeholder="Author name"
+                           th:field="*{author}">
+                    <label th:if="${#fields.hasErrors('author')}" th:errors="*{author}"
+                           style="font-size: small; color: #bb2d3b">Автор курса должен быть заполнен</label>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn mt-2" sec:authorize="hasRole('ADMIN')" type="submit"
+                            style="background: #0dcaf0">Сохранить
+                    </button>
+                </div>
+            </div>
+        </form>
+        <form th:if="${courseDto.id != null}" th:method="post"
+              th:action="@{/course/{id}/avatar(id = ${courseDto.id})}" enctype="multipart/form-data">
+            <div class="form-group mb-4 mt-2 d-flex flex-column">
+                <label class="mb-2" for="cover">Обложка курса</label>
+                <img class="mb-2" th:src="@{/course/{id}/avatar(id = ${courseDto.id})}" width="200">
+                <input sec:authorize="hasRole('ADMIN')" type="file" class="form-control" id="cover"
+                       name="cover">
+                <label sec:authorize="hasRole('ADMIN')" class="text-black-50" style="font-size: small">Поддерживаются
+                    файлы формата: jpg,
+                    png</label>
+            </div>
+            <button sec:authorize="hasRole('ADMIN')" class="btn mt-2" type="submit"
+                    style="background: #0dcaf0">Обновить обложку
+            </button>
+            <form th:if="${courseDto.hasCoverImage}" th:method="delete"
+                  th:action="@{/course/{id}/avatar(id = ${courseDto.id})}">
+                <button class="btn mt-2" sec:authorize="hasRole('ADMIN')" type="submit"
+                        style="background: #0dcaf0">Удалить обложку
+                </button>
+            </form>
+        </form>
+
+        <label class="mt-5" th:if="${courseDto.id != null}">Список уроков</label>
+        <div class="container mt-2" th:if="${courseDto.id != null}">
+            <div class="row border border-primary">
+                <div class="col">
+                    Id
+                </div>
+                <div class="col">
+                    Название
+                </div>
+                <div class="col">
+                    Действие
+                </div>
+            </div>
+            <div class="row border border-primary" th:each="lesson : ${lessons}"
+                 th:unless="${lessons == null || lessons.empty}">
+                <div class="col p-2" th:text="${lesson.id}">
+                    1
+                </div>
+                <div class="col p-2" th:text="${lesson.title}">
+                    Матлогика
+                </div>
+                <div class="col p-2">
+                    <form th:method="delete" th:action="@{/lesson/{id}(id = ${lesson.id})}">
+                        <button class="btn mt-2" sec:authorize="hasRole('ADMIN')" type="submit"
+                                style="background: #0dcaf0">Удалить
+                        </button>
+                    </form>
+                    <a class="btn mt-2"
+                       th:href="@{/lesson/{id}(id = ${lesson.id}, course_id = ${courseDto.id})}"
+                       style="background: #0dcaf0">Редактировать</a>
+                </div>
+            </div>
+            <div class="row border border-top-0 border-primary">
+                <div class="col p-2 text-center" th:if="${lessons == null || lessons.empty}">
+                    Уроков пока нет
+                </div>
+            </div>
+        </div>
+        <div class="container mt-2" th:if="${courseDto.id != null}">
+            <a class="btn" th:href="@{/lesson/new(course_id = ${courseDto.id})}"
+               sec:authorize="hasRole('ADMIN')"
+               style="background: #0dcaf0">Создать
+                урок</a>
+        </div>
+
+        <label class="mt-5" th:if="${courseDto.id != null}">Список участников</label>
+        <div class="container mt-2" th:if="${courseDto.id != null}">
+            <div class="row border border-primary">
+                <div class="col">
+                    Id
+                </div>
+                <div class="col">
+                    Имя пользователя
+                </div>
+                <div class="col" sec:authorize="hasRole('ADMIN')">
+                    Действие
+                </div>
+            </div>
+            <div class="row border border-primary" th:each="user : ${users}"
+                 th:unless="${users == null || users.empty}">
+                <div class="col p-2 " th:text="${user.id}">
+                    1
+                </div>
+                <div class="col p-2 " th:text="${user.username}">
+                    Иван Иванов
+                </div>
+                <div class="col p-2 ">
+                    <form th:method="delete"
+                          th:action="@{{courseId}/unassign/{id}(id = ${user.id}, courseId = ${courseDto.id})}">
+                        <button class="btn mt-2" sec:authorize="hasRole('ADMIN')" type="submit"
+                                style="background: #0dcaf0">Отчислить
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="row border border-top-0 border-primary">
+                <div class="col p-2 text-center" th:if="${users == null || users.empty}">
+                    Учеников пока нет
+                </div>
+            </div>
+            <form th:method="get" th:action="@{/course/{id}/assign(id = ${courseDto.id})}"
+                  sec:authorize="hasRole('ADMIN')">
+                <button class="btn mt-2" type="submit" style="background: #0dcaf0">Добавить нового ученика
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:href="@{/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

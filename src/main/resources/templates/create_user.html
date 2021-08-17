@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
+    <title>Регистрация</title>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div class="d-flex flex-row justify-content-center min-vh-100" style="background: #1a1e21">
+    <div class="w-25 my-5 p-5 h-auto" style="background: #f0f0f0">
+        <h1 class="text-center">Регистрация</h1>
+        <form th:object="${user}" th:method="post" th:action="@{/user}">
+            <input type="hidden" th:field="*{id}">
+            <div class="my-6 mx-3">
+                <div class="form-group mb-4">
+                    <label class="mb-2" for="username">Имя пользователя</label>
+                    <input type="text" class="form-control" id="username" th:field="*{username}">
+                    <label th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                           style="font-size: small; color: #bb2d3b">Имя пользователя не может быть
+                        пустым</label>
+                </div>
+                <div class="form-group mb-4">
+                    <label class="mb-2" for="password">Пароль</label>
+                    <input type="password" class="form-control" id="password" th:field="*{password}">
+                    <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                           style="font-size: small; color: #bb2d3b">Пароль не может быть пустым</label>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn mt-2" type="submit" style="background: #0dcaf0">Зарегистрироваться
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:href="@{/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

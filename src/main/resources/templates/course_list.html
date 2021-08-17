@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
+    <title>Курсы</title>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div class="d-flex flex-row justify-content-center min-vh-100" style="background: #1a1e21">
+    <div class="w-50 my-5 p-5 h-auto" style="background: #f0f0f0">
+        <h1 class="text-center">Курсы</h1>
+        <form th:method="get" th:action="@{/course}">
+            <div class="my-6 mx-3">
+                <div class="form-group mb-4">
+                    <label class="mb-2" for="titlePrefix">Поиск по названию</label>
+                    <input type="text" th:value="${param.titlePrefix}" class="form-control" id="titlePrefix"
+                           name="titlePrefix">
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn mt-2" type="submit" style="background: #0dcaf0">Найти!</button>
+                </div>
+            </div>
+        </form>
+
+        <label class="mt-5">Список курсов</label>
+        <div class="container mt-2">
+            <div class="row border border-primary">
+                <div class="col p-2">
+                    Id
+                </div>
+                <div class="col p-2">
+                    Название
+                </div>
+                <div class="col p-2">
+                    Автор
+                </div>
+                <div class="col p-2">
+                    Действие
+                </div>
+            </div>
+            <div class="row border border-primary" th:each="course : ${courses}">
+                <div class="col p-2 " th:text="${course.id}">
+                    1
+                </div>
+                <div class="col p-2 " th:text="${course.title}">
+                    Матлогика
+                </div>
+                <div class="col p-2" th:text="${course.author}">
+                    Иван Алексеев
+                </div>
+                <div class="col p-2 ">
+                    <form th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
+                        <button class="btn mt-2" type="submit" sec:authorize="hasRole('ADMIN')"
+                                style="background: #0dcaf0">Удалить
+                        </button>
+                    </form>
+                    <form th:method="post" th:action="@{/course/{id}/assign(id = ${course.id})}"
+                          th:if="${userCourses != null && !userCourses.contains(course)}">
+                        <button class="btn mt-2" type="submit" sec:authorize="isAuthenticated()"
+                                style="background: #0dcaf0">
+                            Присоединиться
+                        </button>
+                    </form>
+                    <form th:method="delete" th:action="@{/course/{id}/unassign(id = ${course.id})}"
+                          th:if="${userCourses != null && userCourses.contains(course)}">
+                        <button class="btn mt-2" type="submit" sec:authorize="isAuthenticated()"
+                                style="background: #0dcaf0">
+                            Покинуть
+                        </button>
+                    </form>
+                    <a class="btn mt-2" th:href="@{/course/{id}(id = ${course.id})}"
+                       style="background: #0dcaf0">Редактировать</a>
+                </div>
+            </div>
+            <div class="row border border-primary" th:if="${courses.empty}">
+                <div class="col p-2 text-center">
+                    Курсов пока нет
+                </div>
+            </div>
+        </div>
+        <a class="btn mt-2 pt-2" th:href="@{course/new}" sec:authorize="hasRole('ADMIN')"
+           style="background: #0dcaf0">Создать курс</a>
+    </div>
+</div>
+<script th:href="@{/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
