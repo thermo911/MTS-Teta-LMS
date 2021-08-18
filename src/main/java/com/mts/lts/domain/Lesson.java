@@ -1,8 +1,18 @@
 package com.mts.lts.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.Objects;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "lessons")
 public class Lesson {
@@ -18,58 +28,29 @@ public class Lesson {
     @Column
     private String text;
 
+    @Column
+    private Date createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
+
+    @Column
+    private Date updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "updated_by_id")
+    private User updatedBy;
+
+    @Column
+    private Date deletedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "deleted_by_id")
+    private User deletedBy;
+
     @ManyToOne(optional = false)
-    private Course course;
-
-    public Lesson() {
-    }
-
-    public Lesson(String title, String text, Course course) {
-        this.title = title;
-        this.text = text;
-        this.course = course;
-    }
-
-    public Lesson(Long id, String title, Course course) {
-        this(id, title, null, course);
-    }
-
-    public Lesson(Long id, String title, String text, Course course) {
-        this(title, text, course);
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
+    private Topic topic;
 
     @Override
     public boolean equals(Object o) {
