@@ -25,9 +25,6 @@ public class User {
     private Long id;
 
     @Column
-    private String login;
-
-    @Column
     private String password;
 
     @Column
