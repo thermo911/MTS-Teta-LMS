@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
 
-    @Query("SELECT ROUND(AVG(r.value), 2)" + // that must be checked
+    // TODO: check
+    @Query("SELECT ROUND(AVG(r.value), 2)" +
             "FROM Rating r" +
             "WHERE r.course.id = :course.id")
     Double getRatingForCourse(@Param("course") Course course);

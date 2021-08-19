@@ -14,7 +14,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "courses")
+@Table(name = "courses", indexes = @Index(columnList = "id"))
 public class Course {
 
     @Id
