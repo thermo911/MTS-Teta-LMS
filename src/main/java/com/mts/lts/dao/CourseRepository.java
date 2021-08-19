@@ -1,4 +1,4 @@
-package com.mts.lts.repository;
+package com.mts.lts.dao;
 
 import com.mts.lts.domain.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
