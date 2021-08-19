@@ -20,7 +20,6 @@ import java.util.Set;
 public class User {
 
     @Id
-    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -49,14 +48,14 @@ public class User {
     private Date updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "updated_by_id")
     private User updatedBy;
 
     @Column
     private Date deletedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "deleted_by_id")
     private User deletedBy;
 
     @ManyToMany(mappedBy = "users")

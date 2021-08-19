@@ -62,6 +62,9 @@ public class Course {
     @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
     private AvatarImage coverImage;
 
+    @ManyToMany(mappedBy = "courses")
+    private Set<Category> categories;
+
 
     @Override
     public boolean equals(Object o) {
