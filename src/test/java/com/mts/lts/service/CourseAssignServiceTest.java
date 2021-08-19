@@ -2,8 +2,8 @@ package com.mts.lts.service;
 
 import com.mts.lts.domain.Course;
 import com.mts.lts.domain.User;
-import com.mts.lts.repository.CourseRepository;
-import com.mts.lts.repository.UserRepository;
+import com.mts.lts.dao.CourseRepository;
+import com.mts.lts.dao.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

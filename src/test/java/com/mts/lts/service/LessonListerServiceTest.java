@@ -2,8 +2,8 @@ package com.mts.lts.service;
 
 import com.mts.lts.domain.Course;
 import com.mts.lts.domain.Lesson;
-import com.mts.lts.repository.CourseRepository;
-import com.mts.lts.repository.LessonRepository;
+import com.mts.lts.dao.CourseRepository;
+import com.mts.lts.dao.LessonRepository;
 import com.mts.lts.service.exceptions.LessonNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

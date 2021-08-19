@@ -2,8 +2,8 @@ package com.mts.lts.service;
 
 import com.mts.lts.domain.Course;
 import com.mts.lts.domain.User;
-import com.mts.lts.repository.CourseRepository;
-import com.mts.lts.repository.UserRepository;
+import com.mts.lts.dao.CourseRepository;
+import com.mts.lts.dao.UserRepository;
 import com.mts.lts.service.exceptions.CourseNotFoundException;
 import com.mts.lts.service.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

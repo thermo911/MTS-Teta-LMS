@@ -1,7 +1,7 @@
 package com.mts.lts.service;
 
 import com.mts.lts.domain.Role;
-import com.mts.lts.repository.RoleRepository;
+import com.mts.lts.dao.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
