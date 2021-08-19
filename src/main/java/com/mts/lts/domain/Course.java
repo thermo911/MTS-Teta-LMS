@@ -50,7 +50,7 @@ public class Course {
     private User deletedBy;
 
     @Column
-    private Integer averageRating;
+    private Double averageRating;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Module> modules;
