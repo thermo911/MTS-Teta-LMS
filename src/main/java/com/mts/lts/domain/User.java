@@ -1,10 +1,20 @@
 package com.mts.lts.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.HashSet;
+import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -13,11 +23,40 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String username;
-
     @Column
     private String password;
+
+    @Column
+    private String name;
+
+    @Column
+    private String surname;
+
+    @Column(unique = true)
+    private String email;
+
+    @Column
+    private String phoneNumber;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private AvatarImage avatarImage;
+
+    @Column
+    private Date createdAt;
+
+    @Column
+    private Date updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "updated_by_id")
+    private User updatedBy;
+
+    @Column
+    private Date deletedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "deleted_by_id")
+    private User deletedBy;
 
     @ManyToMany(mappedBy = "users")
     private Set<Course> courses;
@@ -25,72 +64,8 @@ public class User {
     @ManyToMany
     private Set<Role> roles;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private AvatarImage avatarImage;
-
-    public User() {
-        roles = new HashSet<>();
-        courses = new HashSet<>();
-    }
-
-    public User(String username) {
-        this();
-        this.username = username;
-    }
-
-    public User(Long id, String username, String password) {
-        this(username);
-        this.password = password;
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Set<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
-    }
-
-    public AvatarImage getAvatarImage() {
-        return avatarImage;
-    }
-
-    public void setAvatarImage(AvatarImage avatarImage) {
-        this.avatarImage = avatarImage;
-    }
+    @Column
+    private List<String> socialNetworks;
 
     @Override
     public boolean equals(Object o) {

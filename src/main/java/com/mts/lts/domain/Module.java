@@ -7,20 +7,22 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "courses")
-public class Course {
-
+@Table(name = "modules")
+public class Module {
     @Id
-    @Column(name = "course_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(optional = false)
+    private Course course;
 
     @Column
     private String title;
@@ -50,21 +52,8 @@ public class Course {
     @JoinColumn(name = "deleted_by_id")
     private User deletedBy;
 
-    @Column
-    private Double averageRating;
-
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Module> modules;
-
-    @ManyToMany
-    private Set<User> users;
-
-    @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
-    private AvatarImage coverImage;
-
-    @ManyToMany(mappedBy = "courses")
-    private Set<Category> categories;
-
+    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL)
+    List<Topic> topics;
 
     @Override
     public boolean equals(Object o) {
@@ -74,8 +63,8 @@ public class Course {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Course course = (Course) o;
-        return Objects.equals(id, course.id);
+        Module module = (Module) o;
+        return Objects.equals(id, module.id);
     }
 
     @Override

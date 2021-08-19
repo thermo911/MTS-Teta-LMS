@@ -1,24 +1,24 @@
 package com.mts.lts.domain;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.internal.xml.config.ValidationXmlParser;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.*;
+import java.util.Objects;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "courses")
-public class Course {
-
+@Table(name = "news")
+public class News {
     @Id
-    @Column(name = "course_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -27,7 +27,7 @@ public class Course {
 
     @Column
     @Lob
-    private String description;
+    private String text;
 
     @Column
     private Date createdAt;
@@ -43,29 +43,6 @@ public class Course {
     @JoinColumn(name = "updated_by_id")
     private User updatedBy;
 
-    @Column
-    private Date deletedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "deleted_by_id")
-    private User deletedBy;
-
-    @Column
-    private Double averageRating;
-
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Module> modules;
-
-    @ManyToMany
-    private Set<User> users;
-
-    @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
-    private AvatarImage coverImage;
-
-    @ManyToMany(mappedBy = "courses")
-    private Set<Category> categories;
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -74,12 +51,13 @@ public class Course {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Course course = (Course) o;
-        return Objects.equals(id, course.id);
+        News news = (News) o;
+        return Objects.equals(id, news.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
