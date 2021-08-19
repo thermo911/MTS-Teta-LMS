@@ -28,6 +28,7 @@ public class Module {
     private String title;
 
     @Column
+    @Lob
     private String description;
 
     @Column
