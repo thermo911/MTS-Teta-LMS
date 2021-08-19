@@ -1,15 +1,10 @@
 package com.mts.lts.repository;
 
-import com.mts.lts.domain.AvatarImage;
+import com.mts.lts.domain.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 
 @Repository
-public interface AvatarImageRepository extends JpaRepository<AvatarImage, Long> {
-
-    public Optional<AvatarImage> findByUserUsername(String username);
-
-    public Optional<AvatarImage> findByCourseId(Long courseId);
+public interface AvatarImageRepository extends JpaRepository<Image, Long> {
 }

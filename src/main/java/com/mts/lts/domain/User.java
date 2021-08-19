@@ -38,8 +38,8 @@ public class User {
     @Column
     private String phoneNumber;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private AvatarImage avatarImage;
+    @OneToOne
+    private Image avatarImage;
 
     @Column
     private Date createdAt;
