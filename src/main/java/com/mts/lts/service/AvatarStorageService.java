@@ -3,9 +3,9 @@ package com.mts.lts.service;
 import com.mts.lts.domain.AvatarImage;
 import com.mts.lts.domain.Course;
 import com.mts.lts.domain.User;
-import com.mts.lts.repository.AvatarImageRepository;
-import com.mts.lts.repository.CourseRepository;
-import com.mts.lts.repository.UserRepository;
+import com.mts.lts.dao.ImageRepository;
+import com.mts.lts.dao.CourseRepository;
+import com.mts.lts.dao.UserRepository;
 import com.mts.lts.service.exceptions.CourseNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +26,7 @@ import static java.nio.file.StandardOpenOption.*;
 @Service
 public class AvatarStorageService {
 
-    private final AvatarImageRepository avatarImageRepository;
+    private final ImageRepository avatarImageRepository;
 
     private final UserRepository userRepository;
 
@@ -40,7 +40,7 @@ public class AvatarStorageService {
 
     @Autowired
     public AvatarStorageService(
-            AvatarImageRepository avatarImageRepository,
+            ImageRepository avatarImageRepository,
             UserRepository userRepository,
             CourseRepository courseRepository
     ) {

@@ -16,7 +16,10 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {
+        @Index(name = "index_id", columnList = "id"),
+        @Index(name = "index_email", columnList = "email")
+})
 public class User {
 
     @Id
@@ -38,8 +41,8 @@ public class User {
     @Column
     private String phoneNumber;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private AvatarImage avatarImage;
+    @OneToOne
+    private Image avatarImage;
 
     @Column
     private Date createdAt;

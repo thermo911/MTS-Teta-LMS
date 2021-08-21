@@ -2,7 +2,7 @@ package com.mts.lts.service;
 
 import com.mts.lts.Constants;
 import com.mts.lts.domain.Role;
-import com.mts.lts.repository.RoleRepository;
+import com.mts.lts.dao.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

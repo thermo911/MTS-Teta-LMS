@@ -1,7 +1,7 @@
 package com.mts.lts.service;
 
 import com.mts.lts.domain.Lesson;
-import com.mts.lts.repository.LessonRepository;
+import com.mts.lts.dao.LessonRepository;
 import com.mts.lts.service.exceptions.LessonNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

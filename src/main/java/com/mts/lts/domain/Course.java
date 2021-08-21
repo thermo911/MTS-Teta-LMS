@@ -14,7 +14,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "courses")
+@Table(name = "courses", indexes = @Index(columnList = "id"))
 public class Course {
 
     @Id
@@ -59,8 +59,8 @@ public class Course {
     @ManyToMany
     private Set<User> users;
 
-    @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
-    private AvatarImage coverImage;
+    @OneToOne
+    private Image coverImage;
 
     @ManyToMany(mappedBy = "courses")
     private Set<Category> categories;
