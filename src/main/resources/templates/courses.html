@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--th:replace="fragments/header :: header"-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Courses</title>
+  <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
+  <link rel="stylesheet" th:href="@{/style.css}">
+  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)"  th:href="@{/style.css}">
+</head>
+<body>
+    <header class="header" th:replace="fragments/fragment :: header">
+    </header>
+    <div class="main">
+        <div class="container"> 
+            <h2 class="title">Каталог курсов</h2>
+            <div class="search">
+                <form class="row">
+                   <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" >
+                       <div class="search_form">
+                            <input type="text" name="titlePrefix" th:value="${param.titlePrefix}">
+                        </div>
+                   </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                        <button class="button fiolet">Искать</button>
+                    </div>
+                </form>
+            </div>
+            <div class="filter_sorts">
+                <div class="row">
+                    <label>Фильтровать</label>
+                    <label>Сортировать</label>
+                </div>
+                <div class="row">
+                    <select>
+                        <option>По категории</option>
+                        <option>По автору</option>
+                        <option>По длительности</option>
+                    </select>
+                    <select>
+                        <option>По алфавиту</option>
+                        <option>По дате создания</option>
+                        <option>По популярности</option>
+                    </select>
+                    <form><!--чтобы обновить настройки фильтров--><button></button></form>
+                </div>
+            </div>
+            <div class="main_body">
+                <div class="row" style="width: 100%;">
+                    <div class="col-lg-4 col-md-6 col-xs-12" th:unless="${courses.empty}" th:each="course:${courses}">
+                        <a th:href="@{/courses/{id}(id=${course.id})}">
+                            <div class="card">
+                                <img th:src="@{/courses/avatar/{course_id} (course_id = ${course.id})}">
+                                <h3 class="course_title" th:text="${course.getTitle()}">Название курса</h3>
+                                <h4 class="course_author" th:text="${course.getAuthor()}">Автор</h4>
+                                <form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/courses/{id}(id = ${course.id})}">
+                                    <button type="submit" class="button fiolet">Удалить</button>
+                                </form>
+                                <a th:href = "@{/courses/{id}/assign(id = ${course.id})}" sec:authorize="isAuthenticated()">
+                                    <button type="submit" class="button blue">Назначить</button>
+                                </a>
+                                <a th:href="@{/courses/{id}(id = ${course.id})}" sec:authorize="hasRole('ADMIN')">
+                                    <button class="settings" type="submit"></button>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div sec:authorize="hasRole('ADMIN')" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <button class="fiolet arrow"><img src="/pictures/стрелка влево.png"></button>
+                    <button class="fiolet arrow"><img src="/pictures/стрелка вправо.png"></button>
+                    <a th:href="@{/courses/new}"><button class="button fiolet plus"></button></a>
+                </div>
+            </div>
+            <div class="row" th:if="${courses.empty}">
+                <div class="col-lg-5 col-md-5 col-sm-5">
+                    <div class="error">
+                        <label>Не найдено курсов</label>
+                    </div>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-7">
+                    <div class="search_error">
+                        <img src="/pictures/error1.jpg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div class="faq">Помощь</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div class="faq">Контакты</div>
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                    <p class="footer_label">Знания-сила!</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div class="faq">Оставить отзыв</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

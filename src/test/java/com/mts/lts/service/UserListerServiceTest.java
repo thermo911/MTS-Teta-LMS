@@ -1,10 +1,10 @@
 package com.mts.lts.service;
 
 import com.mts.lts.Constants;
-import com.mts.lts.domain.Course;
+import com.mts.lts.domain.Module;
 import com.mts.lts.domain.Role;
 import com.mts.lts.domain.User;
-import com.mts.lts.dao.CourseRepository;
+import com.mts.lts.dao.ModuleRepository;
 import com.mts.lts.dao.RoleRepository;
 import com.mts.lts.dao.UserRepository;
 import com.mts.lts.service.exceptions.UserNotFoundException;
@@ -34,7 +34,7 @@ public class UserListerServiceTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private CourseRepository courseRepository;
+    private ModuleRepository moduleRepository;
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
@@ -51,7 +51,7 @@ public class UserListerServiceTest {
     @BeforeEach
     void setUpForEach() {
         userRepository.deleteAll();
-        courseRepository.deleteAll();
+        moduleRepository.deleteAll();
         roleRepository.deleteAll();
         List<Role> roles = roleRepository.findAll();
         Role role = roleRepository.save(new Role(Constants.STUDENT_ROLE));
@@ -61,15 +61,15 @@ public class UserListerServiceTest {
         testUser2 = new User(testUsername2);
         testUser2.setPassword(testPassword2);
         testUser2.setRoles(new HashSet<>(Collections.singleton(role)));
-        Course course = courseRepository.save(
-                new Course(
+        Module module = moduleRepository.save(
+                new Module(
                         "author",
                         "title",
                         Collections.emptyList(),
                         new HashSet<>()
                 )
         );
-        testCourseId = course.getId();
+        testCourseId = module.getId();
     }
 
     @Test

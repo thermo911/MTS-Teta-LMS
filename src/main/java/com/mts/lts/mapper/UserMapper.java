@@ -47,7 +47,7 @@ public class UserMapper extends AbstractMapper<UserDto, User, UserListerService>
                 entity.getUsername(),
                 "",
                 entity.getRoles(),
-                entity.getAvatarImage() != null
+                entity.getImage() != null
         );
     }
 }

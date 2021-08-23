@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -17,22 +16,24 @@ import java.util.Objects;
 @Entity
 @Table(name = "topics")
 public class Topic {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    private Module module;
-
     @Column
     private String title;
 
-    @Column
     @Lob
-    private String description;
+    @Column
+    private String text;
 
     @Column
     private Date createdAt;
+
+    @ManyToOne(optional = false)
+    private Module module;
+
 
     @ManyToOne
     @JoinColumn(name = "created_by_id")
@@ -52,8 +53,7 @@ public class Topic {
     @JoinColumn(name = "deleted_by_id")
     private User deletedBy;
 
-    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)
-    List<Lesson> lessons;
+
 
     @Override
     public boolean equals(Object o) {
@@ -70,5 +70,11 @@ public class Topic {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Topic(Long id, String title, Module module) {
+        this.id = id;
+        this.title = title;
+        this.module = module;
     }
 }

@@ -6,21 +6,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.sql.Date;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "courses", indexes = @Index(columnList = "id"))
+@Table(name = "courses")
 public class Course {
-
     @Id
-    @Column(name = "course_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToMany
+    private Set<User> users;
+
 
     @Column
     private String title;
@@ -39,6 +44,9 @@ public class Course {
     @Column
     private Date updatedAt;
 
+    @NotBlank(message = "Course author has to be filled")
+    private String author; //заменить на id
+
     @ManyToOne
     @JoinColumn(name = "updated_by_id")
     private User updatedBy;
@@ -50,14 +58,8 @@ public class Course {
     @JoinColumn(name = "deleted_by_id")
     private User deletedBy;
 
-    @Column
-    private Double averageRating;
-
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Module> modules;
-
-    @ManyToMany
-    private Set<User> users;
+    List<Module> modules;
 
     @OneToOne
     private Image coverImage;
@@ -77,6 +79,8 @@ public class Course {
         Course course = (Course) o;
         return Objects.equals(id, course.id);
     }
+
+
 
     @Override
     public int hashCode() {

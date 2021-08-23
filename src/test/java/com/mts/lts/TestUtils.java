@@ -1,10 +1,11 @@
 package com.mts.lts;
 
 import com.mts.lts.domain.Course;
-import com.mts.lts.domain.Lesson;
+import com.mts.lts.domain.Module;
+import com.mts.lts.domain.Topic;
 import com.mts.lts.domain.User;
-import com.mts.lts.dto.CourseDto;
-import com.mts.lts.dto.LessonDto;
+import com.mts.lts.dto.ModuleDto;
+import com.mts.lts.dto.TopicDto;
 import com.mts.lts.dto.UserDto;
 
 import java.util.LinkedList;
@@ -23,22 +24,22 @@ public class TestUtils {
         assertEquals(expectedCourse.getAuthor(), actualCourse.getAuthor());
         assertEquals(expectedCourse.getTitle(), actualCourse.getTitle());
         assertEquals(expectedCourse.getUsers(), actualCourse.getUsers());
-        assertEquals(expectedCourse.getLessons(), actualCourse.getLessons());
+        assertEquals(expectedCourse.getModules(), actualCourse.getModules());
     }
 
-    public static void assertEqualsCourse(Set<Course> expectedCourses, Set<Course> actualCourses) {
-        assertEquals(expectedCourses.size(), actualCourses.size());
-        List<Course> sortedExpectedCourses = new LinkedList<>(expectedCourses);
-        List<Course> sortedActualCourses = new LinkedList<>(actualCourses);
-        for (int i = 0; i < sortedExpectedCourses.size(); i++) {
-            assertEqualsCourse(sortedExpectedCourses.get(i), sortedActualCourses.get(i));
+    public static void assertEqualsCourse(Set<Course> expectedCours, Set<Course> actualCours) {
+        assertEquals(expectedCours.size(), actualCours.size());
+        List<Module> sortedExpectedCours = new LinkedList<>(expectedCours);
+        List<Module> sortedActualCours = new LinkedList<>(actualCours);
+        for (int i = 0; i < sortedExpectedCours.size(); i++) {
+            assertEqualsCourse(sortedExpectedCours.get(i), sortedActualCours.get(i));
         }
     }
 
-    public static void assertEqualsCourseDto(CourseDto expectedCourseDto, CourseDto actualCourseDto) {
-        assertEquals(expectedCourseDto.getId(), actualCourseDto.getId());
-        assertEquals(expectedCourseDto.getAuthor(), actualCourseDto.getAuthor());
-        assertEquals(expectedCourseDto.getTitle(), actualCourseDto.getTitle());
+    public static void assertEqualsCourseDto(ModuleDto expectedModuleDto, ModuleDto actualModuleDto) {
+        assertEquals(expectedModuleDto.getId(), actualModuleDto.getId());
+        assertEquals(expectedModuleDto.getAuthor(), actualModuleDto.getAuthor());
+        assertEquals(expectedModuleDto.getTitle(), actualModuleDto.getTitle());
     }
 
     public static void assertEqualsUser(User expectedUser, User actualUser) {
@@ -65,24 +66,24 @@ public class TestUtils {
         assertEquals(expectedUserDto.getRoles(), expectedUserDto.getRoles());
     }
 
-    public static void assertEqualsLesson(Lesson expectedLesson, Lesson actualLesson) {
-        assertEquals(expectedLesson.getId(), expectedLesson.getId());
-        assertEquals(expectedLesson.getText(), expectedLesson.getText());
-        assertEquals(expectedLesson.getTitle(), expectedLesson.getTitle());
-        assertEqualsCourse(expectedLesson.getCourse(), expectedLesson.getCourse());
+    public static void assertEqualsLesson(Topic expectedTopic, Topic actualTopic) {
+        assertEquals(expectedTopic.getId(), expectedTopic.getId());
+        assertEquals(expectedTopic.getText(), expectedTopic.getText());
+        assertEquals(expectedTopic.getTitle(), expectedTopic.getTitle());
+        assertEqualsCourse(expectedTopic.getCourse(), expectedTopic.getCourse());
     }
 
-    public static void assertEqualsLesson(List<Lesson> expectedLessons, List<Lesson> actualLessons) {
-        assertEquals(expectedLessons.size(), actualLessons.size());
-        for (int i = 0; i < expectedLessons.size(); i++) {
-            assertEqualsLesson(expectedLessons.get(i), actualLessons.get(i));
+    public static void assertEqualsLesson(List<Topic> expectedTopics, List<Topic> actualTopics) {
+        assertEquals(expectedTopics.size(), actualTopics.size());
+        for (int i = 0; i < expectedTopics.size(); i++) {
+            assertEqualsLesson(expectedTopics.get(i), actualTopics.get(i));
         }
     }
 
-    public static void assertEqualsLessonDto(LessonDto expectedLessonDto, LessonDto actualLessonDto) {
-        assertEquals(expectedLessonDto.getId(), expectedLessonDto.getId());
-        assertEquals(expectedLessonDto.getText(), expectedLessonDto.getText());
-        assertEquals(expectedLessonDto.getTitle(), expectedLessonDto.getTitle());
-        assertEquals(expectedLessonDto.getCourseId(), expectedLessonDto.getCourseId());
+    public static void assertEqualsLessonDto(TopicDto expectedTopicDto, TopicDto actualTopicDto) {
+        assertEquals(expectedTopicDto.getId(), expectedTopicDto.getId());
+        assertEquals(expectedTopicDto.getText(), expectedTopicDto.getText());
+        assertEquals(expectedTopicDto.getTitle(), expectedTopicDto.getTitle());
+        assertEquals(expectedTopicDto.getCourseId(), expectedTopicDto.getCourseId());
     }
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Info_user</title>
+  <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
+  <link rel="stylesheet" href="../static/style_window.css">
+  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/static/style_window.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="window">
+                <div class="row">
+                    <a class="close" href="#"><button ><img src="static/pictures/крестик.svg"></button></a>
+                </div>
+                <div class="row">
+                    <div class="title_form">
+                        <label>Информация о пользователе</label>
+                    </div>
+                </div>
+                <form> <!--заполнишь как надо но вроде здесь пост метод-->
+                    <div class="row">
+                        <div class="name_user">
+                            <div class="label_input">Имя пользователя</div>
+                            <input class="form_input" type="text">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="password">
+                            <div class="label_input">Пароль</div>
+                            <input class="form_input" type="text">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="file">
+                            <div class="label_input">Аватар</div>
+                            <div class="file_upload form_input">
+                                <div>Файл не выбран</div>
+                                <button>Выбрать</button>
+                                <input type="file">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="info_block">
+                            <div class="label_input">Информация</div>
+                            <textarea class="form_input"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="button_save">
+                            <form><button class="button fiolet">Сохранить</button></form>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

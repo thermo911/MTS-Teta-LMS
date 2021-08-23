@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where c.id = :courseId)")
     List<User> findNotAssignedToCourse(@Param("courseId") Long courseId);
 
-    Optional<User> findUserByEmail(String email);
+    Optional<User> findUserByUsername(String email);
 
-    Boolean existsByEmail(String email);
+    Boolean existsByUsername(String email);
 }
