@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                     .antMatchers("/**").permitAll()
                     .and()
                     .formLogin()
-                    .defaultSuccessUrl("/course")
+                    .defaultSuccessUrl("/courses")
                     .and()
                     .exceptionHandling()
                     .accessDeniedPage("/access_denied");
