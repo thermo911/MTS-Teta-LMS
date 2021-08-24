@@ -61,7 +61,7 @@ public class TopicController {
         }
         Topic topic = topicMapper.dtoToDomain(topicDto);
         topicListerService.save(topic);
-        return "redirect:/module/" + topicDto.getCourseId();
+        return "redirect:/modules/" + topicDto.getModuleId();
     }
 
     @Secured("ROLE_ADMIN")
@@ -70,7 +70,7 @@ public class TopicController {
     public String deleteTopic(@PathVariable("id") Long id) {
         Long moduleId = topicListerService.findById(id).getModule().getId();
         topicListerService.deleteById(id);
-        return "redirect:/module/" + moduleId;
+        return "redirect:/modules/" + moduleId;
     }
 
     @ExceptionHandler

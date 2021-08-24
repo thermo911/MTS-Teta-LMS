@@ -65,14 +65,14 @@
                                 </tr>
                             </table>
                         </div>
-                        <div class="error" th:if="${lessons.empty}">
+                        <div class="error" th:if="${topics.empty}">
                             <div>Уроки отсуствуют. Создайте первый урок!</div>
                         </div>
                     </div>
                     <div class="row" >
                         <div class="button_save">
-                            <a th:href="@{/topics/new}">
-                                <input type="hidden" name="course_id" th:value="${moduleDto.id}"/>
+                            <a th:href="@{/topics/new (moduleId = ${moduleDto.id})}">
+                                <input type="hidden" name="moduleId" th:value="${moduleDto.id}"/>
                                 <button type="submit" class="button fiolet">Добавить</button>
                             </a>
                         </div>

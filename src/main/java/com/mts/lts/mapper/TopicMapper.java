@@ -30,7 +30,7 @@ public class TopicMapper extends AbstractMapper<TopicDto, Topic, TopicListerServ
             topic = entityService.findById(lessonDtoId);
         } else {
             topic = new Topic();
-            Module module = moduleListerService.getOne(entityDto.getCourseId());
+            Module module = moduleListerService.getOne(entityDto.getModuleId());
             topic.setModule(module);
         }
         topic.setTitle(entityDto.getTitle());
