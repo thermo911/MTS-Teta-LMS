@@ -1,19 +1,33 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<!DOCTYPE>
+<html html  xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
-    <title>Курс не найден</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oops!</title>
+  <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
+  <link rel="stylesheet" href="../static/style.css">
+  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/static/style.css}">
 </head>
 <body>
-<header th:replace="fragments/header :: header"></header>
-<div class="d-flex flex-row justify-content-center min-vh-100" style="background: #1a1e21">
-    <div class="w-25 my-5 p-5 h-auto" style="background: #f0f0f0">
-        <div class="alert alert-danger" role="alert">Страница не найдена, обратитесь к администратору
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-md-7 col-sm-7">
+                <div class="error_img">
+                    <img src="static/pictures/error2.jpg">
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5">
+                <div class="text_error">
+                    <h1>404</h1>
+                    <h3>Страница не найдена</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <a href="courses.html"><button class="button linear">Назад</button></a>
+            </div>
         </div>
     </div>
-</div>
-
-<script th:href="@{/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

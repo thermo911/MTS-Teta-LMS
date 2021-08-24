@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+  <header class="header" th:fragment="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+            <div class="home">
+              <a th:href="@{/courses}"><img  src="/pictures/Vector.png"></a>
+            </div>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+            <div class="users" sec:authorize="hasRole('ADMIN')">
+              <a th:href="@{/admin/users}"><button></button></a>
+            </div>
+          </div>
+          <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+            <div class="courses">
+              <a th:href="@{/courses}"><img th:src="@{/pictures/icons8-курсы-96 2.png}"></a>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <div class="profile">
+              <a th:href="@{/users/me}"><button></button></a>
+            </div>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" sec:authorize="isAuthenticated()">
+              <div class="exit_button">
+                  <a th:href="@{/logout}"><button></button></a>
+              </div>
+          </div>
+          <div class="col-lg-1 col-md-col-sm-1 col-xs-1" sec:authorize="!isAuthenticated()">
+            <div class="login_button">
+              <a th:href="@{/login}"><button></button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+  </header>
+</body>
+</html>

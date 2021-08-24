@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Info_module</title>
+  <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
+  <link rel="stylesheet" th:href="@{/style_window.css}">
+  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/style_window.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="window">
+                <div class="row">
+                    <a class="close" th:href="@{/courses/{courseId} (courseId = ${moduleDto.courseId})}"><button ><img src="/pictures/крестик.svg"></button></a>
+                </div>
+                <div class="row">
+                    <div class="title_form">
+                        <label>Информация о модуле</label>
+                    </div>
+                </div>
+                <form th:method="post" th:action="@{/modules}" th:object="${moduleDto}">
+                    <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{courseId}">
+
+                    <div class="row">
+                        <div class="name_user">
+                            <div class="label_input">Название</div>
+                            <input class="form_input" type="text" th:field="*{title}">
+                            <small class="validation-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Поле обязательно к заполнению</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="info_block">
+                            <div class="label_input">Информация</div>
+                            <textarea class="form_input"></textarea>
+<!--                            <textarea class="form_input" th:field="*{text}"></textarea>-->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="button_save">
+                            <button type="submit" class="button fiolet">Сохранить</button>
+                        </div>
+                    </div>
+                </form>
+                <div th:unless="${topics == null}">
+                    <div class="table_block">
+                        <div class="label_input">Уроки</div>
+                        <div class="row" th:unless="${topics.empty}">
+                            <table class="table">
+                                <tr class="table_title">
+                                    <th>Id</th>
+                                    <th>Название</th>
+                                    <th>Action</th>
+                                </tr>
+                                <tr class="table_body" th:each="topic:${topics}">
+                                    <td th:text="${topic.id}">1</td>
+                                    <td th:text="${topic.title}">Верстка</td>
+                                    <td>
+                                        <form th:method="delete" th:action="@{/topics/{id}(id = ${topic.id})}">
+                                            <button type="submit" class="button fiolet">Удалить</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="error" th:if="${topics.empty}">
+                            <div>Уроки отсуствуют. Создайте первый урок!</div>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="button_save">
+                            <a th:href="@{/topics/new (moduleId = ${moduleDto.id})}">
+                                <input type="hidden" name="moduleId" th:value="${moduleDto.id}"/>
+                                <button type="submit" class="button fiolet">Добавить</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

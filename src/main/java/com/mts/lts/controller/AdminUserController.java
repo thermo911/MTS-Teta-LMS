@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin/user")
+@RequestMapping("/admin/users")
 public class AdminUserController {
 
     private final RoleListerService roleListerService;

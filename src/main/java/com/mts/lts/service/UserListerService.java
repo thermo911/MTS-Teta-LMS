@@ -1,6 +1,7 @@
 package com.mts.lts.service;
 
 import com.mts.lts.domain.Course;
+import com.mts.lts.domain.Module;
 import com.mts.lts.domain.User;
 import com.mts.lts.dao.UserRepository;
 import com.mts.lts.service.exceptions.UserNotFoundException;
@@ -57,14 +58,14 @@ public class UserListerService implements FieldValueExists {
     @Transactional
     public void deleteById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        for (Course course : new LinkedList<>(user.getCourses())) {
+        for (Course course : new LinkedList<>(user.getCourses())) { // Course
             courseAssignService.unassignToCourse(id, course.getId());
         }
         userRepository.deleteById(id);
     }
 
     public User findByUsername(String username) {
-        return userRepository.findUserByUsername(username)
+        return userRepository.findUserByUsername(username) // Course
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
     }
 

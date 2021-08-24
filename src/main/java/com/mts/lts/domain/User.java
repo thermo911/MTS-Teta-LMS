@@ -27,6 +27,9 @@ public class User {
     private Long id;
 
     @Column
+    private String username;
+
+    @Column
     private String password;
 
     @Column
@@ -42,7 +45,7 @@ public class User {
     private String phoneNumber;
 
     @OneToOne
-    private Image avatarImage;
+    private Image image;
 
     @Column
     private Date createdAt;
@@ -68,7 +71,8 @@ public class User {
     private Set<Role> roles;
 
     @Column
-    private List<String> socialNetworks;
+    private String socialNetworks;
+//    private List<String> socialNetworks;
 
     @Override
     public boolean equals(Object o) {

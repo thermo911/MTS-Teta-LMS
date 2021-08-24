@@ -4,8 +4,9 @@ import com.mts.lts.Constants;
 import com.mts.lts.domain.Course;
 import com.mts.lts.domain.User;
 import com.mts.lts.dto.CourseDto;
+import com.mts.lts.dto.ModuleDto;
 import com.mts.lts.mapper.CourseMapper;
-import com.mts.lts.mapper.LessonMapper;
+import com.mts.lts.mapper.ModuleMapper;
 import com.mts.lts.mapper.UserMapper;
 import com.mts.lts.service.*;
 import com.mts.lts.service.errors.InternalServerError;
@@ -30,15 +31,15 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/course")
+@RequestMapping("/courses")
 public class CourseController {
 
     private final CourseListerService courseListerService;
     private final UserListerService userListerService;
-    private final LessonListerService lessonListerService;
+    private final ModuleListerService moduleListerService;
     private final CourseAssignService courseAssignService;
     private final AvatarStorageService avatarStorageService;
-    private final LessonMapper lessonMapper;
+    private final ModuleMapper moduleMapper;
     private final CourseMapper courseMapper;
     private final UserMapper userMapper;
 
@@ -46,19 +47,19 @@ public class CourseController {
     public CourseController(
             CourseListerService courseListerService,
             UserListerService userListerService,
-            LessonListerService lessonListerService,
+            ModuleListerService topicListerService,
             CourseAssignService courseAssignService,
             AvatarStorageService avatarStorageService,
-            LessonMapper lessonMapper,
+            ModuleMapper moduleMapper,
             CourseMapper courseMapper,
             UserMapper userMapper
     ) {
         this.courseListerService = courseListerService;
         this.userListerService = userListerService;
-        this.lessonListerService = lessonListerService;
+        this.moduleListerService = topicListerService;
         this.courseAssignService = courseAssignService;
         this.avatarStorageService = avatarStorageService;
-        this.lessonMapper = lessonMapper;
+        this.moduleMapper = moduleMapper;
         this.courseMapper = courseMapper;
         this.userMapper = userMapper;
     }
@@ -66,11 +67,9 @@ public class CourseController {
     @GetMapping
     public String courseTable(
             Model model,
-            @RequestParam(name = "titlePrefix", required = false) String titlePrefix,
+            @RequestParam(name = "titlePrefix", required = false, defaultValue = "") String titlePrefix,
             Principal principal
     ) {
-        titlePrefix = titlePrefix == null ? "" : titlePrefix;
-        model.addAttribute("activePage", "courses");
         model.addAttribute(
                 "courses",
                 courseMapper.domainToDto(courseListerService.findByTitleWithPrefix(titlePrefix))
@@ -79,13 +78,13 @@ public class CourseController {
             User user = userListerService.findByUsername(principal.getName());
             model.addAttribute("userCourses", courseMapper.domainToDto(user.getCourses()));
         }
-        return "course_list";
+        return "courses";
     }
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/new")
     public String courseForm(Model model) {
-        model.addAttribute("courseDto", new CourseDto());
+        model.addAttribute("courseDto", new ModuleDto());
         return "edit_course";
     }
 
@@ -94,8 +93,8 @@ public class CourseController {
         Course course = courseListerService.findById(id);
         model.addAttribute("courseDto", courseMapper.domainToDto(course));
         model.addAttribute(
-                "lessons",
-                lessonMapper.domainToDto(lessonListerService.findByCourseIdWithoutText(course.getId()))
+                "modules",
+                moduleMapper.domainToDto(moduleListerService.findByCourseId(course.getId()))
         );
         model.addAttribute(
                 "users",
@@ -154,7 +153,7 @@ public class CourseController {
             @PathVariable("id") Long courseId
     ) {
         avatarStorageService.deleteAvatarImageByCourse(courseId);
-        return "redirect:/course/" + courseId;
+        return "redirect:/courses/" + courseId;
     }
 
     @Secured("ROLE_ADMIN")
@@ -165,7 +164,7 @@ public class CourseController {
             return "edit_course";
         }
         courseListerService.save(courseMapper.dtoToDomain(courseDto));
-        return "redirect:/course";
+        return "redirect:/courses";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -184,9 +183,9 @@ public class CourseController {
         String redirect;
         if (userId == null) {
             userId = userListerService.findByUsername(request.getUserPrincipal().getName()).getId();
-            redirect = "redirect:/course";
+            redirect = "redirect:/courses";
         } else {
-            redirect = "redirect:/course/" + courseId;
+            redirect = "redirect:/courses/" + courseId;
         }
         courseAssignService.assignToCourse(userId, courseId);
         return redirect;
@@ -199,7 +198,7 @@ public class CourseController {
             @PathVariable("userId") Long userId
     ) {
         courseAssignService.unassignToCourse(userId, courseId);
-        return "redirect:/course/" + courseId;
+        return "redirect:/courses/" + courseId;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -210,14 +209,14 @@ public class CourseController {
     ) {
         Long userId = userListerService.findByUsername(principal.getName()).getId();
         courseAssignService.unassignToCourse(userId, courseId);
-        return "redirect:/course";
+        return "redirect:/courses";
     }
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public String deleteCourse(@PathVariable("id") Long id) {
         courseListerService.deleteById(id);
-        return "redirect:/course";
+        return "redirect:/courses";
     }
 
     @ExceptionHandler

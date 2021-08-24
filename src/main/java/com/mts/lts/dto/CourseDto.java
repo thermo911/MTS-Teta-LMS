@@ -1,8 +1,15 @@
 package com.mts.lts.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class CourseDto {
 
     private Long id;
@@ -15,8 +22,6 @@ public class CourseDto {
 
     private boolean hasCoverImage;
 
-    public CourseDto() {
-    }
 
     public CourseDto(
             Long id,

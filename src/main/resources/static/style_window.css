@@ -1,0 +1,332 @@
+*{
+    margin:0;
+    padding:0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.window{
+    margin:auto;
+    width:80%;
+    height:auto;
+    background-color: #2a043a;
+    margin: 140px auto;
+    border-radius:20px;
+    padding-bottom:40px;
+    color: #FFF;
+}
+.page{
+    width:100%;
+    height:auto;
+    background-color: #2a043a;
+    padding-bottom:50px;
+    padding-top:50px;
+    color: #FFF;
+}
+.sign{
+    width: 100vw;
+    height: 100vh;
+    background-image: url("/pictures/фон3.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    display:flex;
+}
+.sign_block{
+    margin:auto;
+    height:auto;
+    width:30%;
+    background-color: #FFF;
+    color:#41055A;
+    border-radius: 15px;
+    box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.3);
+    padding:0 2%;
+}
+.sign_block h1{
+    margin:10px auto;
+    font-size:25px;
+}
+.sign_block button{
+    color:#FFF;
+    border:none;
+    border-radius: 5px;
+    height:24px;
+    width:auto;
+    padding:0 3%;
+    float:right;
+    margin:0 0 20px 20px;
+}
+.input_sign{
+    font-size: 18px;
+    font-weight: 500;
+    margin:4% 0;
+    display:flex;
+    justify-content: space-between;
+}
+.input_sign input{
+    border:1px solid #c1a6cc;
+    border-radius:3px;
+    width:68%;
+    outline:none;
+    height:20px;
+    margin:auto 0;
+    color: #41055A;
+}
+.window  .form_input, .window  .info_block textarea, .window  .table{
+    box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.25);
+}
+.page  .form_input, .page  .info_block textarea, .page  .table{
+    box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.25);
+}
+.window .label_input{
+    font-size: 18px;
+    margin-bottom: 10px;
+}  
+.close{
+    width: 35px;
+    height: 35px;
+    margin-left:94%;
+    margin-top:1.5%;
+}
+.close button{
+    background-color: transparent;
+    border:none;
+    display:flex;
+    cursor:pointer;
+}
+.close img{
+    margin:auto;
+}
+.window_a{
+    margin-top:-30px;
+    margin-left: 100px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 18px;
+}
+.window_a:hover{
+    color:rgb(155, 154, 154);
+    text-decoration: underline;
+}
+.title_form{
+    text-align: center;
+    margin:auto;
+    font-style: normal;
+    font-weight:500;
+    font-size: 30px;
+    line-height: 40px;
+    margin-top:15px;
+}
+.name_user,.password, .file, .name_lesson, .name_course, .author, .roles, #structure{
+    height:auto;
+    margin:20px auto 10px auto;
+    width:80%;
+}
+.name_user select{
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image:url("/pictures/список.png");
+    background-size: 100%;
+    background-position: center;
+    margin-top:10px;
+    width:100%;
+}
+.label_input{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 24px;
+    margin-bottom:15px;
+    margin-left:10px;
+}
+.form_input, .tree{
+    width: 100%;
+    height: 40px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    border:none;
+    outline: none;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 18px;
+	line-height: 20px;
+	color:#41055A;
+    display:flex;
+}
+.tree{
+    height:auto;
+    margin-bottom:50px;
+}
+main p{
+    margin:auto 0px;
+}
+.file_upload{
+    position: relative;
+    overflow: hidden;
+    font-size: 18px;
+    height: 40px;  
+    display:flex;           
+}
+.file_upload > div, .file_upload > button{
+    float: left;
+    height: 100%;
+    margin:0;
+}
+.file_upload > div{
+    width: 80%;             
+    padding-left: 1em;      
+    margin-right: -1em;
+    line-height: 20px;
+    padding-top:10px; 
+}
+.file_upload > button{
+    width:20%; 
+    border:none;
+    font-size: 18px;  
+    color:#41055A;          
+}
+.file_upload input[type=file]{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: scale(20);
+    opacity: 0;
+    cursor:pointer
+}
+.info_block{
+    margin:20px auto -10px auto;
+    width:80%;
+    height:200px;
+}
+.info_block textarea{
+    height:150px;
+    resize:none;
+    padding-top:8px;
+    padding-bottom:8px;
+}
+
+.button{
+    height: 40px;
+    width:auto;
+    border-radius: 10px;
+    text-align: center;
+    color: #fff;
+    font-size:15px;
+    border: none;
+    padding-right:20px;
+    padding-left:20px;
+    cursor:pointer;
+}
+.fiolet{
+    background-color: #41055A;
+}
+.fiolet:hover{
+    background-color: #5d0981;
+}
+.fiolet:active{
+    background-color: #320546;
+}
+.blue{
+    background-color: #3880E8;
+}
+.blue:hover{
+    background-color: #5098fc;
+}
+.blue:active{
+    background-color: #27589c;
+}
+.button_save{
+    width: 80%;
+    margin: 29px auto;
+}
+.button_save button{
+    float:right;
+    width:auto;
+}
+.table_block{
+    width:80%;
+    margin:auto;
+}
+.table_block > .button_save{
+    width:100%;
+}
+.table{
+    width:100%;
+    height:auto;
+    background-color:#fff;
+    color:#41055A;
+    font-size:17px;
+    line-height: 44px;
+    font-weight: 500;
+    border-spacing: 0;
+    text-align: left;
+    border-radius: 20px;
+    padding:5px 0px;
+    margin-bottom: -5px;
+}
+.table td, .table th{
+    padding-left: 20px;
+    border-bottom: 1px solid #41055A;
+}
+.table tr:last-of-type td{
+    border-bottom: none;
+}
+.table_title th{
+    border-bottom: 1px solid #41055A;
+}
+.table_body button{
+    margin-bottom:10px;
+    margin-top:10px;
+    width:auto;
+}
+.table button{
+    float:left;
+}
+.multiple{
+    height:80px;
+}
+.error{
+    margin-top:8px;
+    font-size:15px;
+    color: #fff;
+}
+.treeline, .treeline ul, .treeline li {
+    margin:0px; 
+    padding: 0; 
+    list-style: none;
+}
+.treeline{
+    margin:1% 5%;
+}
+.treeline ul{
+    margin: 0 0 0 30px;
+}
+.treeline > li:not(:only-child), .treeline li li {
+    position: relative;
+    padding: 3px 0 0 20px;
+}
+
+.treeline li:not(:last-child){ 
+    border-left: 1px solid #41055A;
+}
+
+.treeline li li:before, .treeline > li:not(:only-child):before {
+    content: ""; 
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 1.1em; 
+    height: .7em; 
+    border-bottom:1px solid #41055A;
+}
+.treeline li:last-child:before {
+    width: calc(1.1em - 1px); 
+    border-left: 1px solid #41055A;
+}
+.hide{
+    display:none;
+}
+
+@media screen and (max-width:770px) and (min-width:320px){ 
+    .container{width: 97vw; max-width:100%}
+}
