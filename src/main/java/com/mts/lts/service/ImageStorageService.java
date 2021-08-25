@@ -27,7 +27,7 @@ public class ImageStorageService {
         this.imageRepository = imageRepository;
     }
 
-    public void save(Image prevImage, String contentType, InputStream is) {
+    public Image save(Image prevImage, String contentType, InputStream is) {
         String filename;
         Image newImage;
 
@@ -48,6 +48,7 @@ public class ImageStorageService {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+        return newImage;
     }
 
     public void deleteImage(Image image) {

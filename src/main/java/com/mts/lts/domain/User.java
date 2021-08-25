@@ -45,7 +45,7 @@ public class User {
     private String phoneNumber;
 
     @OneToOne
-    private Image image;
+    private Image avatarImage;
 
     @Column
     private Date createdAt;

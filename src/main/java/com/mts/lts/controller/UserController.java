@@ -1,14 +1,17 @@
 package com.mts.lts.controller;
 
 import com.mts.lts.Constants;
+import com.mts.lts.domain.Image;
 import com.mts.lts.domain.Role;
 import com.mts.lts.domain.User;
 import com.mts.lts.dto.UserDto;
 import com.mts.lts.mapper.UserMapper;
 import com.mts.lts.service.AvatarStorageService;
+import com.mts.lts.service.ImageStorageService;
 import com.mts.lts.service.RoleListerService;
 import com.mts.lts.service.UserListerService;
 import com.mts.lts.service.errors.InternalServerError;
+import com.mts.lts.service.exceptions.ResourceNotFoundException;
 import com.mts.lts.service.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,19 +46,22 @@ public class UserController {
 
     private final UserListerService userListerService;
     private final RoleListerService roleListerService;
-    private final AvatarStorageService avatarStorageService;
+    // private final AvatarStorageService avatarStorageService;
+    private final ImageStorageService imageStorageService;
     private final UserMapper userMapper;
 
     @Autowired
     public UserController(
             UserListerService userListerService,
             RoleListerService roleListerService,
-            AvatarStorageService avatarStorageService,
+            //AvatarStorageService avatarStorageService,
+            ImageStorageService imageStorageService,
             UserMapper userMapper
     ) {
         this.userListerService = userListerService;
         this.roleListerService = roleListerService;
-        this.avatarStorageService = avatarStorageService;
+        // this.avatarStorageService = avatarStorageService;
+        this.imageStorageService = imageStorageService;
         this.userMapper = userMapper;
     }
 
@@ -79,7 +85,7 @@ public class UserController {
             Principal principal
     ) {
         String username = principal.getName();
-        UserDto userDto = userMapper.domainToDto(userListerService.findByUsername(username));
+        UserDto userDto = userMapper.domainToDto(userListerService.findByEmail(username));
         model.addAttribute("user", userDto);
         return "edit_user";
     }
@@ -87,13 +93,18 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me/avatar")
     @ResponseBody
-    public ResponseEntity<byte[]> avatarImage(Principal principal) {
-        String contentType = avatarStorageService.getContentTypeByUser(principal.getName());
-        byte[] data = avatarStorageService.getAvatarImageByUser(principal.getName());
+    public ResponseEntity<byte[]> avatarImage(Principal principal) throws ResourceNotFoundException {
+
+        User user = userListerService.findByEmail(principal.getName());
+        byte[] data = imageStorageService.getImageData(user.getAvatarImage())
+                .orElseThrow(ResourceNotFoundException::new);
+
         return ResponseEntity
                 .ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(data);
+                .contentType(MediaType.parseMediaType(
+                        user.getAvatarImage()
+                            .getContentType())
+                ).body(data);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -103,12 +114,16 @@ public class UserController {
             Principal principal
     ) {
         if (!avatar.isEmpty()) {
+            User user = userListerService.findByEmail(principal.getName());
             try {
-                avatarStorageService.save(
-                        principal.getName(),
-                        avatar.getContentType(),
-                        avatar.getInputStream()
+                user.setAvatarImage(
+                        imageStorageService.save(
+                                user.getAvatarImage(),
+                                avatar.getContentType(),
+                                avatar.getInputStream()
+                        )
                 );
+                userListerService.save(user);
             } catch (Exception ex) {
                 throw new InternalServerError(ex);
             }
@@ -121,7 +136,8 @@ public class UserController {
     public String deleteAvatarImage(
             Principal principal
     ) {
-        avatarStorageService.deleteAvatarImageByUser(principal.getName());
+        User user = userListerService.findByEmail(principal.getName());
+        imageStorageService.deleteImage(user.getAvatarImage());
         return "redirect:/user/me";
     }
 
@@ -188,5 +204,10 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView("internal_error");
         modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         return modelAndView;
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Void> resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
+        return ResponseEntity.notFound().build();
     }
 }

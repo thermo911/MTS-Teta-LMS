@@ -39,7 +39,6 @@ public class CourseController {
     private final UserListerService userListerService;
     private final ModuleListerService moduleListerService;
     private final CourseAssignService courseAssignService;
-    //private final AvatarStorageService avatarStorageService;
     private final ImageStorageService imageStorageService;
     private final ModuleMapper moduleMapper;
     private final CourseMapper courseMapper;
@@ -51,7 +50,6 @@ public class CourseController {
             UserListerService userListerService,
             ModuleListerService topicListerService,
             CourseAssignService courseAssignService,
-            //AvatarStorageService avatarStorageService,
             ImageStorageService imageStorageService,
             ModuleMapper moduleMapper,
             CourseMapper courseMapper,
@@ -79,7 +77,7 @@ public class CourseController {
                 courseMapper.domainToDto(courseListerService.findByTitleWithPrefix(titlePrefix))
         );
         if (principal != null) {
-            User user = userListerService.findByUsername(principal.getName());
+            User user = userListerService.findByEmail(principal.getName());
             model.addAttribute("userCourses", courseMapper.domainToDto(user.getCourses()));
         }
         return "courses";
@@ -143,11 +141,14 @@ public class CourseController {
         if (!cover.isEmpty()) {
             Course course = courseListerService.findById(courseId);
             try {
-                imageStorageService.save(
-                        course.getCoverImage(),
-                        cover.getContentType(),
-                        cover.getInputStream()
+                course.setCoverImage(
+                        imageStorageService.save(
+                                course.getCoverImage(),
+                                cover.getContentType(),
+                                cover.getInputStream()
+                        )
                 );
+                courseListerService.save(course);
             } catch (Exception ex) {
                 throw new InternalServerError(ex);
             }
@@ -191,7 +192,7 @@ public class CourseController {
 
         String redirect;
         if (userId == null) {
-            userId = userListerService.findByUsername(request.getUserPrincipal().getName()).getId();
+            userId = userListerService.findByEmail(request.getUserPrincipal().getName()).getId();
             redirect = "redirect:/courses";
         } else {
             redirect = "redirect:/courses/" + courseId;
@@ -216,7 +217,7 @@ public class CourseController {
             @PathVariable("courseId") Long courseId,
             Principal principal
     ) {
-        Long userId = userListerService.findByUsername(principal.getName()).getId();
+        Long userId = userListerService.findByEmail(principal.getName()).getId();
         courseAssignService.unassignToCourse(userId, courseId);
         return "redirect:/courses";
     }
