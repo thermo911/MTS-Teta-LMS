@@ -26,13 +26,16 @@ public class SecurityConfiguration {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http
+            http.csrf().disable()
                     .authorizeRequests()
+                    .antMatchers("/registration").not().fullyAuthenticated()
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/**").permitAll()
                     .and()
                     .formLogin()
+                    .loginPage("/login")
                     .defaultSuccessUrl("/courses")
+
                     .and()
                     .exceptionHandling()
                     .accessDeniedPage("/access_denied");

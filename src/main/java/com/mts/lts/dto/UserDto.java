@@ -3,19 +3,26 @@ package com.mts.lts.dto;
 import com.mts.lts.domain.Role;
 import com.mts.lts.service.UserListerService;
 import com.mts.lts.validation.unique.Unique;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
 public class UserDto {
 
     private Long id;
 
     @NotBlank(message = "Username has to be filled")
     @Unique(service = UserListerService.class, fieldName = "username", message = "This username is already used")
-    private String username;
+    @Email
+    private String email;
 
     @NotBlank(message = "Password has to be filled")
     private String password;
@@ -30,73 +37,33 @@ public class UserDto {
 
     public UserDto(
             Long id,
-            String username,
+            String email,
             String password
     ) {
         this();
         this.id = id;
-        this.username = username;
+        this.email = email;
         this.password = password;
     }
 
     public UserDto(
             Long id,
-            String username,
+            String email,
             String password,
             Set<Role> roles
     ) {
-        this(id, username, password);
+        this(id, email, password);
         this.roles = roles;
     }
 
     public UserDto(
             Long id,
-            String username,
+            String email,
             String password,
             Set<Role> roles,
             boolean hasAvatarImage
     ) {
-        this(id, username, password, roles);
-        this.hasAvatarImage = hasAvatarImage;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public boolean getHasAvatarImage() {
-        return hasAvatarImage;
-    }
-
-    public void setHasAvatarImage(boolean hasAvatarImage) {
+        this(id, email, password, roles);
         this.hasAvatarImage = hasAvatarImage;
     }
 

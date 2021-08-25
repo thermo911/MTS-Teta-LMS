@@ -29,7 +29,7 @@
                             <select class="form_input" id="userId" name="userId" required >
                                 <option th:each="user :${users}"
                                         th:value="${user.id}"
-                                        th:text="${user.username}"> username</option>
+                                        th:text="${user.email}"> username</option>
                               </select>
                         </div>
                     </div>

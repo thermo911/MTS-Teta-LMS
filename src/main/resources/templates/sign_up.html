@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SignIn</title>
     <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
-    <link rel="stylesheet" href="../static/style_window.css">
-    <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" href="../static/style_window.css">
+    <link rel="stylesheet" th:href="@{/style_window.css}">
+    <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/style_window.css}">
 </head>
 <body>
    <div class="sign">
@@ -15,34 +15,18 @@
             <div class="row">
                 <h1>Регистрация</h1>
             </div>
-            <form>
-                <div class="input_sign">
-                    <label>Логин</label>
-                    <input type="text">
-                </div>
+            <form th:object="${userDto}" th:action="@{/registration}" th:method="post" >
                 <div class="input_sign">
                     <label>E-mail</label>
-                    <input type="text">
-                </div>
-                <div class="input_sign">
-                    <label>Ник</label>
-                    <input type="text">
+                    <input type="text" th:field="*{email}">
                 </div>
                 <div class="input_sign">
                     <label>Пароль</label>
-                    <input type="text">
-                </div>
-                <div class="input_sign">
-                    <label>Повтор пароля</label>
-                    <input type="text">
-                </div>
-                <div class="input_sign">
-                    <label>Аватар</label>
-                    <input type="file">
+                    <input type="text" th:field="*{password}">
                 </div>
                 <div class="row" style="justify-content:space-around;">
-                    <a href="sign_in.html">Вход</a>
-                    <button class="fiolet">Регистрация</button>
+                    <a th:href="@{/login}">Вход</a>
+                    <button class="fiolet" type="submit">Регистрация</button>
                 </div>
             </form>
         </div>

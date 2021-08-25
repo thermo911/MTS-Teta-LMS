@@ -30,7 +30,7 @@ public class UserMapper extends AbstractMapper<UserDto, User, UserListerService>
         } else {
             user = new User();
         }
-        user.setEmail(entityDto.getUsername());
+        user.setEmail(entityDto.getEmail());
         // For ability to update roles without password change
         if (entityDtoId == null || !entityDto.getPassword().isEmpty()) {
             user.setPassword(encoder.encode(entityDto.getPassword()));
