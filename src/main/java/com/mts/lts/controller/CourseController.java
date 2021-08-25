@@ -2,6 +2,7 @@ package com.mts.lts.controller;
 
 import com.mts.lts.Constants;
 import com.mts.lts.domain.Course;
+import com.mts.lts.domain.Image;
 import com.mts.lts.domain.User;
 import com.mts.lts.dto.CourseDto;
 import com.mts.lts.dto.ModuleDto;
@@ -11,6 +12,7 @@ import com.mts.lts.mapper.UserMapper;
 import com.mts.lts.service.*;
 import com.mts.lts.service.errors.InternalServerError;
 import com.mts.lts.service.exceptions.CourseNotFoundException;
+import com.mts.lts.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,7 +40,7 @@ public class CourseController {
     private final UserListerService userListerService;
     private final ModuleListerService moduleListerService;
     private final CourseAssignService courseAssignService;
-    private final AvatarStorageService avatarStorageService;
+    private final ImageStorageService imageStorageService;
     private final ModuleMapper moduleMapper;
     private final CourseMapper courseMapper;
     private final UserMapper userMapper;
@@ -49,7 +51,7 @@ public class CourseController {
             UserListerService userListerService,
             ModuleListerService topicListerService,
             CourseAssignService courseAssignService,
-            AvatarStorageService avatarStorageService,
+            ImageStorageService imageStorageService,
             ModuleMapper moduleMapper,
             CourseMapper courseMapper,
             UserMapper userMapper
@@ -58,7 +60,8 @@ public class CourseController {
         this.userListerService = userListerService;
         this.moduleListerService = topicListerService;
         this.courseAssignService = courseAssignService;
-        this.avatarStorageService = avatarStorageService;
+        //this.avatarStorageService = avatarStorageService;
+        this.imageStorageService = imageStorageService;
         this.moduleMapper = moduleMapper;
         this.courseMapper = courseMapper;
         this.userMapper = userMapper;
@@ -75,7 +78,7 @@ public class CourseController {
                 courseMapper.domainToDto(courseListerService.findByTitleWithPrefix(titlePrefix))
         );
         if (principal != null) {
-            User user = userListerService.findByUsername(principal.getName());
+            User user = userListerService.findByEmail(principal.getName());
             model.addAttribute("userCourses", courseMapper.domainToDto(user.getCourses()));
         }
         return "courses";
@@ -118,33 +121,46 @@ public class CourseController {
     @ResponseBody
     public ResponseEntity<byte[]> coverImage(
             @PathVariable("id") Long courseId
-    ) {
-        String contentType = avatarStorageService.getContentTypeByCourse(courseId);
-        byte[] data = avatarStorageService.getAvatarImageByCourse(courseId);
+    ) throws ResourceNotFoundException {
+        Course course = courseListerService.findById(courseId);
+        if (course.getCoverImage() == null) {
+            course.setCoverImage(new Image(
+                    null, "image/jpeg", "default_cover.jpeg"
+            ));
+        }
+        byte[] data = imageStorageService.getImageData(course.getCoverImage())
+                .orElseThrow(ResourceNotFoundException::new);
         return ResponseEntity
                 .ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(data);
+                .contentType(MediaType.parseMediaType(
+                        course.getCoverImage()
+                        .getContentType())
+                ).body(data);
     }
 
     @Secured("ROLE_ADMIN")
     @PostMapping("/{id}/avatar")
+    @Transactional
     public String updateCoverImage(
             @PathVariable("id") Long courseId,
             @RequestParam("cover") MultipartFile cover
     ) {
         if (!cover.isEmpty()) {
+            Course course = courseListerService.findById(courseId);
             try {
-                avatarStorageService.save(
-                        courseId,
-                        cover.getContentType(),
-                        cover.getInputStream()
+                course.setCoverImage(
+                        imageStorageService.save(
+                                course.getCoverImage(),
+                                cover.getContentType(),
+                                cover.getInputStream()
+                        )
                 );
+                courseListerService.save(course);
             } catch (Exception ex) {
                 throw new InternalServerError(ex);
             }
         }
-        return "redirect:/course/" + courseId;
+        return "redirect:/courses/" + courseId;
     }
 
     @Secured("ROLE_ADMIN")
@@ -152,7 +168,8 @@ public class CourseController {
     public String deleteCoverImage(
             @PathVariable("id") Long courseId
     ) {
-        avatarStorageService.deleteAvatarImageByCourse(courseId);
+        Course course = courseListerService.findById(courseId);
+        imageStorageService.deleteImage(course.getCoverImage());
         return "redirect:/courses/" + courseId;
     }
 
@@ -182,7 +199,7 @@ public class CourseController {
 
         String redirect;
         if (userId == null) {
-            userId = userListerService.findByUsername(request.getUserPrincipal().getName()).getId();
+            userId = userListerService.findByEmail(request.getUserPrincipal().getName()).getId();
             redirect = "redirect:/courses";
         } else {
             redirect = "redirect:/courses/" + courseId;
@@ -207,7 +224,7 @@ public class CourseController {
             @PathVariable("courseId") Long courseId,
             Principal principal
     ) {
-        Long userId = userListerService.findByUsername(principal.getName()).getId();
+        Long userId = userListerService.findByEmail(principal.getName()).getId();
         courseAssignService.unassignToCourse(userId, courseId);
         return "redirect:/courses";
     }
@@ -224,5 +241,10 @@ public class CourseController {
         ModelAndView modelAndView = new ModelAndView("not_found");
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
         return modelAndView;
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Void> resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
+        return ResponseEntity.notFound().build();
     }
 }

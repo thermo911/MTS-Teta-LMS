@@ -32,7 +32,7 @@
                     <div class="col-lg-4 col-md-6 col-xs-12" th:unless="${users.empty}" th:each="user:${users}">
                         <a th:href="@{/admin/users/{id}(id=${user.id})}">
                             <div class="card">
-                                <img src="/pictures/english.jpg">
+                                <img th:src="@{/users/{id}/avatar (id=${user.id})}">
                                 <h3 class="course_title" th:text="${user.username}">Имя пользователя</h3>
                                 <form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/admin/users/{id} (id = ${user.id})}">
                                     <button type="submit" class="button fiolet">Удалить</button>

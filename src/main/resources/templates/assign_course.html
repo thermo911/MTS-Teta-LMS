@@ -6,23 +6,23 @@
 
   <title>Add_user</title>
   <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
-  <link rel="stylesheet" href="../static/style_window.css">
-  <link rel="stylesheet" href="../static/style.css">
-  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/static/style_window.css}">
+  <link rel="stylesheet" th:href="@{/style_window.css}">
+  <link rel="stylesheet" th:href="@{/static/style.css}">
+  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/style_window.css}">
 </head>
 <body>
     <div class="container">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="window">
                 <div class="row">
-                    <a class="close" href="#"><button><img src="static/pictures/крестик.svg"></button></a>
+                    <a class="close" th:href="@{/courses}"><button><img src="/pictures/крестик.svg"></button></a>
                 </div>
                 <div class="row">
                     <div class="title_form">
                         <label>Добавить пользователя</label>
                     </div>
                 </div>
-                <form th:method="post" th:action="@{/course/{courseId}/assign(courseId = ${courseId})}">
+                <form th:method="post" th:action="@{/courses/{courseId}/assign(courseId = ${courseId})}">
                     <div class="row">
                         <div class="name_user">
                             <div class="label_input">Имя пользователя</div>

@@ -24,9 +24,9 @@ public class UserAuthService implements UserDetailsService {
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.mts.lts.domain.User user = userListerService.findByUsername(username);
+        com.mts.lts.domain.User user = userListerService.findByEmail(username);
         return new User(
-                user.getUsername(),
+                user.getEmail(),
                 user.getPassword(),
                 user.getRoles().stream()
                         .map(role -> new SimpleGrantedAuthority(role.getName()))

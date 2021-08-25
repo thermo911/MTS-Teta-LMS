@@ -1,14 +1,16 @@
 package com.mts.lts.controller;
 
 import com.mts.lts.Constants;
+import com.mts.lts.domain.Image;
 import com.mts.lts.domain.Role;
 import com.mts.lts.domain.User;
 import com.mts.lts.dto.UserDto;
 import com.mts.lts.mapper.UserMapper;
-import com.mts.lts.service.AvatarStorageService;
+import com.mts.lts.service.ImageStorageService;
 import com.mts.lts.service.RoleListerService;
 import com.mts.lts.service.UserListerService;
 import com.mts.lts.service.errors.InternalServerError;
+import com.mts.lts.service.exceptions.ResourceNotFoundException;
 import com.mts.lts.service.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,19 +45,19 @@ public class UserController {
 
     private final UserListerService userListerService;
     private final RoleListerService roleListerService;
-    private final AvatarStorageService avatarStorageService;
+    private final ImageStorageService imageStorageService;
     private final UserMapper userMapper;
 
     @Autowired
     public UserController(
             UserListerService userListerService,
             RoleListerService roleListerService,
-            AvatarStorageService avatarStorageService,
+            ImageStorageService imageStorageService,
             UserMapper userMapper
     ) {
         this.userListerService = userListerService;
         this.roleListerService = roleListerService;
-        this.avatarStorageService = avatarStorageService;
+        this.imageStorageService = imageStorageService;
         this.userMapper = userMapper;
     }
 
@@ -79,22 +81,59 @@ public class UserController {
             Principal principal
     ) {
         String username = principal.getName();
-        UserDto userDto = userMapper.domainToDto(userListerService.findByUsername(username));
+        UserDto userDto = userMapper.domainToDto(userListerService.findByEmail(username));
         model.addAttribute("user", userDto);
-        return "edit_user";
+        return "profile";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me/avatar")
     @ResponseBody
-    public ResponseEntity<byte[]> avatarImage(Principal principal) {
-        String contentType = avatarStorageService.getContentTypeByUser(principal.getName());
-        byte[] data = avatarStorageService.getAvatarImageByUser(principal.getName());
+    public ResponseEntity<byte[]> avatarImage(Principal principal) throws ResourceNotFoundException {
+
+        User user = userListerService.findByEmail(principal.getName());
+        if (user.getImage() == null) {
+            user.setImage(new Image(
+                    null, "image/png", "default_avatar.png"
+            ));
+        }
+        byte[] data = imageStorageService.getImageData(user.getImage())
+                .orElseThrow(ResourceNotFoundException::new);
+
         return ResponseEntity
                 .ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(data);
+                .contentType(MediaType.parseMediaType(
+                        user.getImage()
+                            .getContentType())
+                ).body(data);
     }
+
+    @GetMapping("/{id}/avatar")
+    @ResponseBody
+    public ResponseEntity<byte[]> avatarImageByUserId(@PathVariable("id") Long id) throws ResourceNotFoundException {
+        User user = userListerService.findById(id);
+
+        Image image;
+        if (user.getImage() != null) {
+            image = user.getImage();
+
+        } else{
+            image = new Image(
+                    null, "image/png", "default_avatar.png"
+            );
+
+        }
+        byte[] data = imageStorageService.getImageData(image)
+                .orElseThrow(ResourceNotFoundException::new);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType(
+                        image
+                                .getContentType())
+                ).body(data);
+    }
+
+
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/me/avatar")
@@ -103,12 +142,16 @@ public class UserController {
             Principal principal
     ) {
         if (!avatar.isEmpty()) {
+            User user = userListerService.findByEmail(principal.getName());
             try {
-                avatarStorageService.save(
-                        principal.getName(),
-                        avatar.getContentType(),
-                        avatar.getInputStream()
+                user.setImage(
+                        imageStorageService.save(
+                                user.getImage(),
+                                avatar.getContentType(),
+                                avatar.getInputStream()
+                        )
                 );
+                userListerService.save(user);
             } catch (Exception ex) {
                 throw new InternalServerError(ex);
             }
@@ -121,7 +164,8 @@ public class UserController {
     public String deleteAvatarImage(
             Principal principal
     ) {
-        avatarStorageService.deleteAvatarImageByUser(principal.getName());
+        User user = userListerService.findByEmail(principal.getName());
+        imageStorageService.deleteImage(user.getImage());
         return "redirect:/users/me";
     }
 
@@ -152,13 +196,13 @@ public class UserController {
 
         String redirectPath;
         if (request.isUserInRole(Constants.ADMIN_ROLE)) {
-            redirectPath = "redirect:/admin/user";
+            redirectPath = "redirect:/admin/users";
         } else {
             Long userId = user.getId();
             if (userId != null) {
                 // prevent post of other user
                 User savedUser = userListerService.getOne(userId);
-                if (!savedUser.getUsername().equals(request.getUserPrincipal().getName())) {
+                if (!savedUser.getEmail().equals(request.getUserPrincipal().getName())) {
                     response.setStatus(403);
                     return "forward:/access_denied";
                 }
@@ -168,7 +212,7 @@ public class UserController {
                 Role studentRole = roleListerService.findByName(Constants.STUDENT_ROLE);
                 user.setRoles(Collections.singleton(studentRole));
             }
-            redirectPath = "redirect:/course";
+            redirectPath = "redirect:/courses";
         }
 
         userListerService.save(userMapper.dtoToDomain(user));
@@ -188,5 +232,10 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView("internal_error");
         modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         return modelAndView;
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Void> resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
+        return ResponseEntity.notFound().build();
     }
 }

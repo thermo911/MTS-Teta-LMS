@@ -1,7 +1,6 @@
 package com.mts.lts.service;
 
 import com.mts.lts.domain.Course;
-import com.mts.lts.domain.Module;
 import com.mts.lts.domain.User;
 import com.mts.lts.dao.UserRepository;
 import com.mts.lts.service.exceptions.UserNotFoundException;
@@ -64,8 +63,8 @@ public class UserListerService implements FieldValueExists {
         userRepository.deleteById(id);
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findUserByUsername(username) // Course
+    public User findByEmail(String username) {
+        return userRepository.findUserByEmail(username) // Course
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
     }
 
@@ -82,6 +81,6 @@ public class UserListerService implements FieldValueExists {
             return false;
         }
 
-        return userRepository.existsByUsername((String) value);
+        return userRepository.existsByEmail((String) value);
     }
 }
