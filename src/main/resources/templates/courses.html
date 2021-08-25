@@ -49,18 +49,18 @@
             <div class="main_body">
                 <div class="row" style="width: 100%;">
                     <div class="col-lg-4 col-md-6 col-xs-12" th:unless="${courses.empty}" th:each="course:${courses}">
-                        <a th:href="@{/courses/{id}(id=${course.id})}">
+                        <a th:href="@{/admin/courses/{id}(id=${course.id})}">
                             <div class="card">
-                                <img th:src="@{/courses/{course_id}/avatar (course_id = ${course.id})}">
+                                <img th:src="@{/admin/courses/{course_id}/avatar (course_id = ${course.id})}">
                                 <h3 class="course_title" th:text="${course.getTitle()}">Название курса</h3>
                                 <h4 class="course_author" th:text="${course.getAuthor()}">Автор</h4>
                                 <form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/courses/{id}(id = ${course.id})}">
                                     <button type="submit" class="button fiolet">Удалить</button>
                                 </form>
-                                <a th:href = "@{/courses/{id}/assign(id = ${course.id})}" sec:authorize="isAuthenticated()">
+                                <a th:href = "@{/admin/courses/{id}/assign(id = ${course.id})}" sec:authorize="isAuthenticated()">
                                     <button type="submit" class="button blue">Назначить</button>
                                 </a>
-                                <a th:href="@{/courses/{id}(id = ${course.id})}" sec:authorize="hasRole('ADMIN')">
+                                <a th:href="@{/admin/courses/{id}(id = ${course.id})}" sec:authorize="hasRole('ADMIN')">
                                     <button class="settings" type="submit"></button>
                                 </a>
                             </div>
@@ -70,7 +70,7 @@
                 <div sec:authorize="hasRole('ADMIN')" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="fiolet arrow"><img src="/pictures/стрелка влево.png"></button>
                     <button class="fiolet arrow"><img src="/pictures/стрелка вправо.png"></button>
-                    <a th:href="@{/courses/new}"><button class="button fiolet plus"></button></a>
+                    <a th:href="@{/admin/courses/new}"><button class="button fiolet plus"></button></a>
                 </div>
             </div>
             <div class="row" th:if="${courses.empty}">

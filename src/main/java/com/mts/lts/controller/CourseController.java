@@ -32,10 +32,11 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.security.Principal;
 
-@Controller
-@RequestMapping("/courses")
-public class CourseController {
+import static com.mts.lts.Constants.PREF_ADMIN_COURSES;
 
+@Controller
+@RequestMapping(PREF_ADMIN_COURSES)
+public class CourseController {
     private final CourseListerService courseListerService;
     private final UserListerService userListerService;
     private final ModuleListerService moduleListerService;
@@ -60,7 +61,6 @@ public class CourseController {
         this.userListerService = userListerService;
         this.moduleListerService = topicListerService;
         this.courseAssignService = courseAssignService;
-        //this.avatarStorageService = avatarStorageService;
         this.imageStorageService = imageStorageService;
         this.moduleMapper = moduleMapper;
         this.courseMapper = courseMapper;
@@ -160,7 +160,7 @@ public class CourseController {
                 throw new InternalServerError(ex);
             }
         }
-        return "redirect:/courses/" + courseId;
+        return String.format("redirect:%s/%d", PREF_ADMIN_COURSES, courseId);
     }
 
     @Secured("ROLE_ADMIN")
@@ -170,7 +170,7 @@ public class CourseController {
     ) {
         Course course = courseListerService.findById(courseId);
         imageStorageService.deleteImage(course.getCoverImage());
-        return "redirect:/courses/" + courseId;
+        return String.format("redirect:%s/%d", PREF_ADMIN_COURSES, courseId);
     }
 
     @Secured("ROLE_ADMIN")
@@ -181,7 +181,7 @@ public class CourseController {
             return "edit_course";
         }
         courseListerService.save(courseMapper.dtoToDomain(courseDto));
-        return "redirect:/courses";
+        return String.format("redirect:/%s", PREF_ADMIN_COURSES);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -215,7 +215,7 @@ public class CourseController {
             @PathVariable("userId") Long userId
     ) {
         courseAssignService.unassignToCourse(userId, courseId);
-        return "redirect:/courses/" + courseId;
+        return String.format("redirect:%s/%d", PREF_ADMIN_COURSES, courseId);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -226,14 +226,14 @@ public class CourseController {
     ) {
         Long userId = userListerService.findByEmail(principal.getName()).getId();
         courseAssignService.unassignToCourse(userId, courseId);
-        return "redirect:/courses";
+        return String.format("redirect:%s", PREF_ADMIN_COURSES);
     }
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public String deleteCourse(@PathVariable("id") Long id) {
         courseListerService.deleteById(id);
-        return "redirect:/courses";
+        return String.format("redirect:%s", PREF_ADMIN_COURSES);
     }
 
     @ExceptionHandler
