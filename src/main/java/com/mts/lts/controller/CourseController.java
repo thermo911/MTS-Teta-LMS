@@ -92,6 +92,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
+    @Transactional
     public String courseForm(Model model, @PathVariable("id") Long id) {
         Course course = courseListerService.findById(id);
         model.addAttribute("courseDto", courseMapper.domainToDto(course));
@@ -103,6 +104,11 @@ public class CourseController {
                 "users",
                 userMapper.domainToDto(course.getUsers())
         );
+        model.addAttribute(
+                "moduleTreeTree",
+                moduleMapper.listDomainToModuleTreeDtoList(moduleListerService.findByCourseId(course.getId()))
+        );
+
         return "edit_course";
     }
 

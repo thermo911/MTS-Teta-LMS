@@ -49,7 +49,7 @@
             <div class="main_body">
                 <div class="row" style="width: 100%;">
                     <div class="col-lg-4 col-md-6 col-xs-12" th:unless="${courses.empty}" th:each="course:${courses}">
-                        <a th:href="@{/admin/courses/{id}(id=${course.id})}">
+                        <a th:href="@{/courses/{id}(id=${course.id})}">
                             <div class="card">
                                 <img th:src="@{/admin/courses/{course_id}/avatar (course_id = ${course.id})}">
                                 <h3 class="course_title" th:text="${course.getTitle()}">Название курса</h3>
