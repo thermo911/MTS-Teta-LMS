@@ -48,14 +48,13 @@ public class AdminUserController {
 
     @GetMapping
     public String userTable(Model model) {
-        model.addAttribute("activePage", "users");
         model.addAttribute("users", userMapper.domainToDto(userListerService.findAll()));
-        return "user_list";
+        return "users";
     }
 
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
         userListerService.deleteById(id);
-        return "redirect:/admin/user";
+        return "redirect:/admin/users";
     }
 }

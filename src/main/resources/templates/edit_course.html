@@ -23,14 +23,14 @@
                         <div class="name_course">
                             <div for="title" class="label_input">Название курса</div>
                             <input class="form_input" type="text" th:field="*{title}">
-                            <small class="validation-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                            <small class="validation-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"> </small>
                         </div>
                     </div>
                     <div class="row">
                         <div class="name_user">
                             <div class="label_input">Автор курса</div>
                             <input class="form_input" type="text" th:field="*{author}">
-                            <small class="validation-error" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">
+                            <small class="validation-error" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"> </small>
                         </div>
                     </div>
                     <div class="row">
@@ -45,27 +45,23 @@
                         </div>
                     </div>
                 </form>
+                <form th:method="post" th:action="@{/courses/{course_id}/avatar (course_id = ${courseDto.id})}" enctype="multipart/form-data">
                 <div class="row" th:unless="${courseDto.id == null}">
-                    <div class="file">
-                        <div class="label_input">Обложка</div>
-                        <form th:method="post" th:action="@{/course/avatar/{course_id} (course_id = ${courseDto.id})}" enctype="multipart/form-data">
-                            <div class="file_upload form_input">
-                                <div>Файл не выбран</div>
-                                <button>Выбрать</button>
-                                <input type="file">
-                            </div>
-                      <!--<form th:method="post" th:action="@{/courses/avatar/{course_id} (course_id = ${courseDto.id})}" enctype="multipart/form-data">
-                            <div class="file_upload">
-                                <button class="button blue plus2"></button>
-                                <input name="avatar" type="file">
-                            </div>-->
+
+                        <div class="file">
+                            <div class="label_input">Обложка</div>
+                                <div class="file_upload form_input">
+                                    <div>Файл</div>
+                                    <button>Выбрать</button>
+                                    <input type="file" name="cover">
+                                </div>
+                        </div>
                     </div>
-                </div>
-                <div class="row" >
-                    <div class="button_save">
-                        <button type="submit" class="button fiolet">Обновить</button>
+                    <div class="row" th:unless="${courseDto.id == null}">
+                        <div class="button_save">
+                            <button type="submit" class="button fiolet">Обновить</button>
+                        </div>
                     </div>
-                </div>
                 </form>
                 <div th:unless="${modules == null}">
                     <div class="table_block">
@@ -101,7 +97,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row hide" id="structure">
+                <div class="row hide" id="structure" th:unless="${courseDto.id == null}">
                     <div class="label_input">Содержание</div>
                     <div class="tree">
                         <ul class="treeline">

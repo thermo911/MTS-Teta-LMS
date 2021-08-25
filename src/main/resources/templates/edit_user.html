@@ -1,61 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Info_user</title>
   <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
-  <link rel="stylesheet" href="../static/style_window.css">
-  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/static/style_window.css}">
+  <link rel="stylesheet" th:href="@{/style_window.css}">
+  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/style_window.css}">
 </head>
 <body>
     <div class="container">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="window">
-                <div class="row">
-                    <a class="close" href="#"><button ><img src="static/pictures/крестик.svg"></button></a>
-                </div>
-                <div class="row">
-                    <div class="title_form">
-                        <label>Информация о пользователе</label>
+
+
+                <form class="window" th:object="${user}" th:method="post" th:action="@{/users}">
+                    <div class="row">
+                        <a class="close" th:href="@{/users/me}"><img src="/pictures/крестик.svg"></a>
                     </div>
-                </div>
-                <form> <!--заполнишь как надо но вроде здесь пост метод-->
+
+
+                    <div class="row">
+                        <div class="title_form">
+                            <label>Редактировать пользователя</label>
+                        </div>
+                    </div>
+
+                    <input type="hidden" th:field="*{id}">
+
                     <div class="row">
                         <div class="name_user">
                             <div class="label_input">Имя пользователя</div>
-                            <input class="form_input" type="text">
+                            <input class="form_input" required th:field="*{username}"></input>
+                            <label th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                                   style="font-size: small; color: #bb2d3b">Название курса должно быть
+                                заполнено</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="password">
-                            <div class="label_input">Пароль</div>
-                            <input class="form_input" type="text">
+                            <div class="label_input">Пароль пользователя</div>
+                            <input class="form_input"  th:field="*{password}"></input>
+                            <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                                   style="font-size: small; color: #bb2d3b">Название курса должно быть
+                                заполнено</label>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="file">
-                            <div class="label_input">Аватар</div>
-                            <div class="file_upload form_input">
-                                <div>Файл не выбран</div>
-                                <button>Выбрать</button>
-                                <input type="file">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="info_block">
-                            <div class="label_input">Информация</div>
-                            <textarea class="form_input"></textarea>
+                        <div class="roles" sec:authorize="hasRole('ADMIN')">
+                            <div class="label_input">Выбрать роль</div>
+                            <select multiple class="multiple form_input" required th:field="*{roles}" >
+                                <option th:each="role : ${roles}"
+                                        th:text="${role.name}"
+                                        th:value="${role.id}"
+                                        th:selected="${user.roles.contains(role)}">Первая роль
+                                </option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="button_save">
-                            <form><button class="button fiolet">Сохранить</button></form>
+                            <button class="button fiolet" type="submit">Сохранить</button>
                         </div>
                     </div>
                 </form>
-            </div>
+
+
         </div>
     </div>
 </body>

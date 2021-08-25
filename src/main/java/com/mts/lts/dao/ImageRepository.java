@@ -12,4 +12,6 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     @Override
     Optional<Image> findById(Long imageId);
+
+    Optional<Image> findByFilename(String filename);
 }

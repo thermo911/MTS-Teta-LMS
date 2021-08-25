@@ -6,45 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users</title>
     <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/static/style.css}">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/style.css}">
 </head>
 <body>
     <header class="header" th:replace="fragments/fragment :: header">
-        <div class="container">
-            <div class="row">
-               <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                    <div class="home">
-                        <a href="my_courses.html"><button><img  src="static/pictures/Vector.png"></button></a>
-                    </div> 
-               </div>
-               <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                    <div class="users">
-                        <a href="users.html"><button></button></a>
-                    </div> 
-                </div>
-               <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">     
-                    <div class="courses">
-                        <a href="courses.html"><button><img src="static/pictures/icons8-курсы-96 2.png"></button></a>
-                    </div>
-               </div>
-               <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                    <div class="profile">
-                        <a href="profile.html"><button></button></a>
-                    </div> 
-                </div>
-                <!--<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                    <div class="exit_button">
-                        <a href=""><button></button></a>
-                    </div> 
-                </div>-->  <!--внимательно раскоментить тут!!!-->
-                <div class="col-lg-1 col-md-col-sm-1 col-xs-1">
-                    <div class="login_button">
-                        <a href=""><button></button></a>
-                    </div> 
-                </div>
-            </div>
-        </div>
     </header>
     <div class="main">
         <div class="container">
@@ -66,7 +32,7 @@
                     <div class="col-lg-4 col-md-6 col-xs-12" th:unless="${users.empty}" th:each="user:${users}">
                         <a th:href="@{/admin/users/{id}(id=${user.id})}">
                             <div class="card">
-                                <img th:src="static/pictures/english.jpg">
+                                <img th:src="@{/users/{id}/avatar (id=${user.id})}">
                                 <h3 class="course_title" th:text="${user.username}">Имя пользователя</h3>
                                 <form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/admin/users/{id} (id = ${user.id})}">
                                     <button type="submit" class="button fiolet">Удалить</button>

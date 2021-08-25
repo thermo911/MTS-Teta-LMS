@@ -5,30 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Profile</title>
   <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
-  <link rel="stylesheet" href="../static/style.css">
-  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" href="../static/style.css">
+  <link rel="stylesheet" th:href="@{/style.css}">
+  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/style.css}">
 </head>
 <body>
     <header class="header" th:replace="fragments/fragment :: header">
-        <div class="container">
-            <div class="row">
-               <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                    <div class="home">
-                        <a href="my_courses.html"><button><img src="static/pictures/Vector.png"></button></a>
-                    </div> 
-               </div>
-               <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">     
-                    <div class="courses">
-                        <a href="courses.html"><button><img src="static/pictures/icons8-курсы-96 2.png"></button></a>
-                    </div>
-               </div>
-               <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                    <div class="profile">
-                        <a href="profile.html"><button class="button fiolet">Профиль</button></a>
-                    </div> 
-                </div>
-            </div>
-        </div>
     </header>
     <main>
         <div class="container" th:object="${user}">
@@ -39,13 +20,15 @@
             </div>
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-5 col-xs-5">
+                    <form th:method="post" th:action="@{/users/me/avatar}" enctype="multipart/form-data" >
                     <div class="row">
                         <div class="user_img"></div>
-                        <form th:method="post" th:action="@{/profile/avatar}" enctype="multipart/form-data">
+
                             <div class="file_upload">
                                 <button class="button blue plus2"></button>
                                 <input name="avatar" type="file">
                             </div>
+
                     </div>
                     <div class="row">
                         <button class="button fiolet">Обновить</button>
