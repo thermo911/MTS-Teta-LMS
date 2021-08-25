@@ -113,7 +113,7 @@ public class UserController {
                 throw new InternalServerError(ex);
             }
         }
-        return "redirect:/user/me";
+        return "redirect:/users/me";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -122,7 +122,7 @@ public class UserController {
             Principal principal
     ) {
         avatarStorageService.deleteAvatarImageByUser(principal.getName());
-        return "redirect:/user/me";
+        return "redirect:/users/me";
     }
 
     @PostMapping

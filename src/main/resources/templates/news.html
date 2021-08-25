@@ -6,37 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>News</title>
   <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
-  <link rel="stylesheet" href="../static/style.css">           <!--th:href="@{/style.css}"-->
-  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)"  th:href="@{/static/style.css}">
+  <link rel="stylesheet" th:href="@{/style.css}">
+  <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)"  th:href="@{/style.css}">
 </head>
 <body>
     <header class="header" th:replace="fragments/fragment :: header">
-        <div class="container">
-            <div class="row">
-               <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                    <div class="home">
-                        <a href="my_courses.html"><button><img src="static/pictures/Vector.png"></button></a>
-                    </div> 
-               </div>
-               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                    <div class="courses">
-                        <a href="courses.html"><button><img src="static/pictures/icons8-курсы-96 2.png"></button></a>
-                    </div>
-               </div>
-               <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                    <div class="profile">
-                        <a href="profile.html"><button></button></a>
-                    </div> 
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                    <div class="exit_button">
-                        <a><!--th:method="post" th:action="@{/logout}" sec:authorize="isAuthenticated()"-->
-                            <button  sec:authentication="principal.username"></button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </header>
     <div class="main">
         <div class="container">
@@ -59,11 +33,14 @@
             </div>
             <div class="main_body">
                 <div class="wraper">
-                    <div class="card_news">
-                        <div class="tegs"><a>#news</a> 
-                                        <a>#learn</a> 
-                                        <a>#js</a></div>
-                        <div class="content">Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel assumenda dolor autem esse totam possimus dolorem odit. Itaque explicabo iste nulla quaerat illo, consequatur veniam ab quas molestias doloribus vel. consectetur adipisicing elit. Asperiores recusandae, ut nam, explicabo id officiis, harum esse deserunt laboriosam aspernatur vitae rem facere quas dolore culpa saepe similique neque officia.</div>
+                    <div class="card_news" th:unless="${news_list.empty}" th:each="news:${news_list}">
+
+                        <div class="tegs">
+                                <a th:href="@{/news (tag = ${tag.name})}" th:text="${tag.name}" th:each="tag : ${news.getTags()}" >#news</a>
+                        </div>
+
+                        <div class="content" th:text="${news.getTitle()}">Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel assumenda dolor autem esse totam possimus dolorem odit. Itaque explicabo iste nulla quaerat illo, consequatur veniam ab quas molestias doloribus vel. consectetur adipisicing elit. Asperiores recusandae, ut nam, explicabo id officiis, harum esse deserunt laboriosam aspernatur vitae rem facere quas dolore culpa saepe similique neque officia.</div>
+                        <div class="content" th:text="${news.getText()}">Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel assumenda dolor autem esse totam possimus dolorem odit. Itaque explicabo iste nulla quaerat illo, consequatur veniam ab quas molestias doloribus vel. consectetur adipisicing elit. Asperiores recusandae, ut nam, explicabo id officiis, harum esse deserunt laboriosam aspernatur vitae rem facere quas dolore culpa saepe similique neque officia.</div>
                         <div class="info_news">
                             <div class="date">21.08.21</div>
                             <div class="author">
@@ -72,93 +49,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card_news">
-                        <div class="tegs"><a>#news</a> 
-                            <a>#learn</a> 
-                            <a>#js</a></div>
-                        <div class="content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores recusandae, ut nam, explicabo id officiis, harum esse deserunt laboriosam aspernatur vitae rem facere quas dolore culpa saepe similique neque officia.</div>
-                        <div class="info_news">
-                            <div class="date">21.08.21</div>
-                            <div class="author">
-                                <div>Иванов А.А.</div>
-                                <img src="#" alt="">
-                                <small>учитель</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card_news">
-                        <div class="tegs"><a>#news</a> 
-                            <a>#learn</a> 
-                            <a>#js</a></div>
-                        <div class="content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores recusandae, ut nam, explicabo id officiis, harum esse deserunt laboriosam aspernatur vitae rem facere quas dolore culpa saepe similique neque officia.</div>
-                        <div class="info_news">
-                            <div class="date">21.08.21</div>
-                            <div class="author">
-                                <div>Иванов А.А.</div>
-                                <img src="#" alt="">
-                                <small>учитель</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card_news">
-                        <div class="tegs"><a>#news</a> 
-                            <a>#learn</a> 
-                            <a>#js</a></div>
-                        <div class="content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores recusandae, ut nam, explicabo id officiis, harum esse deserunt laboriosam aspernatur vitae rem facere quas dolore culpa saepe similique neque officia.</div>
-                        <div class="info_news">
-                            <div class="date">21.08.21</div>
-                            <div class="author">
-                                <div>Иванов А.А.</div>
-                                <img src="#" alt="">
-                                <small>учитель</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card_news">
-                        <div class="tegs"><a>#news</a> 
-                            <a>#learn</a> 
-                            <a>#js</a></div>
-                        <div class="content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores recusandae, ut nam, explicabo id officiis, harum esse deserunt laboriosam aspernatur vitae rem facere quas dolore culpa saepe similique neque officia.</div>
-                        <div class="info_news">
-                            <div class="date">21.08.21</div>
-                            <div class="author">
-                                <div>Иванов А.А.</div>
-                                <img src="#" alt="">
-                                <small>учитель</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card_news">
-                        <div class="tegs"><a>#news</a> 
-                            <a>#learn</a> 
-                            <a>#js</a></div>
-                        <div class="content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum maiores tempore, similique quibusdam expedita, pariatur alias odio voluptatibus repellendus minus laborum perspiciatis vitae saepe est maxime, sit voluptas dignissimos labore. Asperiores recusandae, ut nam, explicabo id officiis, harum esse deserunt laboriosam aspernatur vitae rem facere quas dolore culpa saepe similique neque officia.</div>
-                        <div class="info_news">
-                            <div class="date">21.08.21</div>
-                            <div class="author">
-                                <div>Иванов А.А.</div>
-                                <img src="#" alt="">
-                                <small>учитель</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card_news">
-                        <div class="tegs"><a>#news</a> 
-                            <a>#learn</a> 
-                            <a>#js</a></div>
-                        <div class="content">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                        <div class="info_news">
-                            <div class="date">21.08.21</div>
-                            <div class="author">
-                                <div>Иванов А.А.</div>
-                                <img src="#" alt="">
-                                <small>учитель</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <a href="#" target="_blank"><button class="button fiolet plus"></button></a>
+                    <a th:href="@{news/new}" target="_blank"><button class="button fiolet plus"></button></a>
                 </div>
             </div>
         </div>
