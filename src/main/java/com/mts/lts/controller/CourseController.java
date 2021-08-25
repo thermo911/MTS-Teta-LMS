@@ -11,6 +11,7 @@ import com.mts.lts.mapper.UserMapper;
 import com.mts.lts.service.*;
 import com.mts.lts.service.errors.InternalServerError;
 import com.mts.lts.service.exceptions.CourseNotFoundException;
+import com.mts.lts.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,7 +39,8 @@ public class CourseController {
     private final UserListerService userListerService;
     private final ModuleListerService moduleListerService;
     private final CourseAssignService courseAssignService;
-    private final AvatarStorageService avatarStorageService;
+    //private final AvatarStorageService avatarStorageService;
+    private final ImageStorageService imageStorageService;
     private final ModuleMapper moduleMapper;
     private final CourseMapper courseMapper;
     private final UserMapper userMapper;
@@ -49,7 +51,8 @@ public class CourseController {
             UserListerService userListerService,
             ModuleListerService topicListerService,
             CourseAssignService courseAssignService,
-            AvatarStorageService avatarStorageService,
+            //AvatarStorageService avatarStorageService,
+            ImageStorageService imageStorageService,
             ModuleMapper moduleMapper,
             CourseMapper courseMapper,
             UserMapper userMapper
@@ -58,7 +61,8 @@ public class CourseController {
         this.userListerService = userListerService;
         this.moduleListerService = topicListerService;
         this.courseAssignService = courseAssignService;
-        this.avatarStorageService = avatarStorageService;
+        //this.avatarStorageService = avatarStorageService;
+        this.imageStorageService = imageStorageService;
         this.moduleMapper = moduleMapper;
         this.courseMapper = courseMapper;
         this.userMapper = userMapper;
@@ -118,13 +122,16 @@ public class CourseController {
     @ResponseBody
     public ResponseEntity<byte[]> coverImage(
             @PathVariable("id") Long courseId
-    ) {
-        String contentType = avatarStorageService.getContentTypeByCourse(courseId);
-        byte[] data = avatarStorageService.getAvatarImageByCourse(courseId);
+    ) throws ResourceNotFoundException {
+        Course course = courseListerService.findById(courseId);
+        byte[] data = imageStorageService.getImageData(course.getCoverImage())
+                .orElseThrow(ResourceNotFoundException::new);
         return ResponseEntity
                 .ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(data);
+                .contentType(MediaType.parseMediaType(
+                        course.getCoverImage()
+                        .getContentType())
+                ).body(data);
     }
 
     @Secured("ROLE_ADMIN")
@@ -134,9 +141,10 @@ public class CourseController {
             @RequestParam("cover") MultipartFile cover
     ) {
         if (!cover.isEmpty()) {
+            Course course = courseListerService.findById(courseId);
             try {
-                avatarStorageService.save(
-                        courseId,
+                imageStorageService.save(
+                        course.getCoverImage(),
                         cover.getContentType(),
                         cover.getInputStream()
                 );
@@ -152,7 +160,8 @@ public class CourseController {
     public String deleteCoverImage(
             @PathVariable("id") Long courseId
     ) {
-        avatarStorageService.deleteAvatarImageByCourse(courseId);
+        Course course = courseListerService.findById(courseId);
+        imageStorageService.deleteImage(course.getCoverImage());
         return "redirect:/courses/" + courseId;
     }
 
@@ -224,5 +233,10 @@ public class CourseController {
         ModelAndView modelAndView = new ModelAndView("not_found");
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
         return modelAndView;
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Void> resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
+        return ResponseEntity.notFound().build();
     }
 }
