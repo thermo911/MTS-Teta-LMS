@@ -87,7 +87,7 @@ public class CourseController {
     @Secured("ROLE_ADMIN")
     @GetMapping("/new")
     public String courseForm(Model model) {
-        model.addAttribute("courseDto", new ModuleDto());
+        model.addAttribute("courseDto", new CourseDto());
         return "edit_course";
     }
 
@@ -187,7 +187,7 @@ public class CourseController {
             return "edit_course";
         }
         courseListerService.save(courseMapper.dtoToDomain(courseDto));
-        return String.format("redirect:/%s", PREF_ADMIN_COURSES);
+        return String.format("redirect:%s", PREF_ADMIN_COURSES);
     }
 
     @PreAuthorize("isAuthenticated()")

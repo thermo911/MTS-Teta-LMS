@@ -15,7 +15,7 @@
             <div class="row">
                 <h1>Вход</h1>
             </div>
-            <form  method="POST" action="/login">
+            <form  th:method="POST" th:action="@{/login}">
                 <div class="input_sign">
                     <label>Логин</label>
                     <input name="username" type="text" autofocus="true"/>

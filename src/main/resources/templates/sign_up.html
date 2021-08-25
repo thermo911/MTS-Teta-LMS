@@ -20,9 +20,11 @@
                     <label>E-mail</label>
                     <input type="text" th:field="*{email}">
                 </div>
+                <small class="validation-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">WTFyes</small>
+                <small class="validation-error" th:if="!${#fields.hasErrors('email')}" th:errors="*{email}">WTFNo</small>
                 <div class="input_sign">
                     <label>Пароль</label>
-                    <input type="text" th:field="*{password}">
+                    <input type="password" th:field="*{password}">
                 </div>
                 <div class="row" style="justify-content:space-around;">
                     <a th:href="@{/login}">Вход</a>

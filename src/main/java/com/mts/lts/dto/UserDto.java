@@ -20,7 +20,7 @@ public class UserDto {
     private Long id;
 
     @NotBlank(message = "Username has to be filled")
-    @Unique(service = UserListerService.class, fieldName = "username", message = "This username is already used")
+    @Unique(service = UserListerService.class, fieldName = "email", message = "This username is already used")
     @Email
     private String email;
 
