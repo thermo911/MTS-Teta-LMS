@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -53,7 +54,8 @@ public class Topic {
     @JoinColumn(name = "deleted_by_id")
     private User deletedBy;
 
-
+    @ManyToMany
+    private Set<User> usersWhoCompleted;
 
     @Override
     public boolean equals(Object o) {
