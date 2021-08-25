@@ -2,6 +2,7 @@ package com.mts.lts.controller;
 
 import com.mts.lts.Constants;
 import com.mts.lts.domain.Course;
+import com.mts.lts.domain.Image;
 import com.mts.lts.domain.User;
 import com.mts.lts.dto.CourseDto;
 import com.mts.lts.dto.ModuleDto;
@@ -122,6 +123,11 @@ public class CourseController {
             @PathVariable("id") Long courseId
     ) throws ResourceNotFoundException {
         Course course = courseListerService.findById(courseId);
+        if (course.getCoverImage() == null) {
+            course.setCoverImage(new Image(
+                    null, "image/jpeg", "default_cover.jpeg"
+            ));
+        }
         byte[] data = imageStorageService.getImageData(course.getCoverImage())
                 .orElseThrow(ResourceNotFoundException::new);
         return ResponseEntity

@@ -6,7 +6,6 @@ import com.mts.lts.domain.Role;
 import com.mts.lts.domain.User;
 import com.mts.lts.dto.UserDto;
 import com.mts.lts.mapper.UserMapper;
-import com.mts.lts.service.AvatarStorageService;
 import com.mts.lts.service.ImageStorageService;
 import com.mts.lts.service.RoleListerService;
 import com.mts.lts.service.UserListerService;
@@ -46,7 +45,6 @@ public class UserController {
 
     private final UserListerService userListerService;
     private final RoleListerService roleListerService;
-    // private final AvatarStorageService avatarStorageService;
     private final ImageStorageService imageStorageService;
     private final UserMapper userMapper;
 
@@ -54,13 +52,11 @@ public class UserController {
     public UserController(
             UserListerService userListerService,
             RoleListerService roleListerService,
-            //AvatarStorageService avatarStorageService,
             ImageStorageService imageStorageService,
             UserMapper userMapper
     ) {
         this.userListerService = userListerService;
         this.roleListerService = roleListerService;
-        // this.avatarStorageService = avatarStorageService;
         this.imageStorageService = imageStorageService;
         this.userMapper = userMapper;
     }
@@ -96,6 +92,11 @@ public class UserController {
     public ResponseEntity<byte[]> avatarImage(Principal principal) throws ResourceNotFoundException {
 
         User user = userListerService.findByEmail(principal.getName());
+        if (user.getAvatarImage() == null) {
+            user.setAvatarImage(new Image(
+                    null, "image/png", "default_avatar.png"
+            ));
+        }
         byte[] data = imageStorageService.getImageData(user.getAvatarImage())
                 .orElseThrow(ResourceNotFoundException::new);
 
