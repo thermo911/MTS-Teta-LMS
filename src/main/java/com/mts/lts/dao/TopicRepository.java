@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Long> {
@@ -22,17 +23,18 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
             + " where module.id = :moduleId")
     List<Topic> findByModuleIdWithoutText(@Param("moduleId") Long moduleId);
 
-    @Query("select count(t) from Topic" +
-            "join t.module m" +
-            "join m.course c" +
-            "where c.id = :course.id" +
-            "and:user in t.usersWhoCompleted")
+    @Query("select count(*) from Topic t" +
+            " join t.module m" +
+            " join m.course c" +
+            " where c = :course" +
+            " and :user in (:usersWhoCompleted)")
     Integer countCompletedByUser(@Param("user") User user,
+                                 @Param("usersWhoCompleted") Set<User> usersWhoCompleted,
                                  @Param("course") Course course);
 
-    @Query("select count(t) from Topic t" +
-            "join t.module m" +
-            "join m.course c" +
-            "where c.id = :course.id")
+    @Query("select count(*) from Topic t" +
+            " join t.module m" +
+            " join m.course c" +
+            " where c = :course")
     Integer countTotalTopicsForCourse(@Param("course") Course course);
 }

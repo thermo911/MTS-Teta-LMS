@@ -2,9 +2,12 @@ package com.mts.lts.service;
 
 import com.mts.lts.dao.TopicRepository;
 import com.mts.lts.domain.Course;
+import com.mts.lts.domain.Module;
 import com.mts.lts.domain.Topic;
 import com.mts.lts.domain.User;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class CourseCompletionService {
@@ -28,10 +31,11 @@ public class CourseCompletionService {
     }
 
     public Integer countTopicsCompletedByUser(User user, Course course) {
-        return topicRepository.countCompletedByUser(user, course);
-    }
-
-    public Double getSuccessPercentage(User user, Course course) {
-        return 100.0 * countTopicsCompletedByUser(user, course) / countTopicsForCourse(course);
+        int result = 0;
+        for (Module m : course.getModules())
+            for (Topic t : m.getTopics())
+                if (t.getUsersWhoCompleted().contains(user))
+                    result++;
+        return result;
     }
 }
