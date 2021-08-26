@@ -75,8 +75,9 @@
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                    <div class="ready">
-                        <a href="#"><button class="button fiolet">Урок пройден</button></a>
+                    <div th:unless="${completed}"  class="ready">
+                        <a th:href="@{/courses/{course_id}/modules/{module_id}/complete
+                        (course_id=${course_id}, module_id=${module_id}, topic_id=${topicDto.id})}"><button class="button fiolet">Готово!</button></a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
