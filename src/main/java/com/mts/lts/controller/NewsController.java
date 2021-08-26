@@ -1,12 +1,12 @@
 package com.mts.lts.controller;
 
-import com.mts.lts.dao.TagRepository;
 import com.mts.lts.domain.News;
 import com.mts.lts.dto.NewsDto;
 import com.mts.lts.mapper.NewsMapper;
 import com.mts.lts.service.NewsListerService;
 import com.mts.lts.service.TagListerService;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -62,11 +62,12 @@ public class NewsController {
     @Secured("ROLE_ADMIN")
     @Transactional
     @PostMapping
-    public String submitNewsForm(@Valid NewsDto newsDto, BindingResult bindingResult) {
+    public String submitNewsForm(@Valid NewsDto newsDto, BindingResult bindingResult, Authentication authentication) {
         if (bindingResult.hasErrors()) {
             return "edit_course";
         }
-        newsListerService.save(newsMapper.dtoToDomain(newsDto));
+        News news = newsMapper.dtoToDomain(newsDto);
+        newsListerService.save(news, authentication);
         return "redirect:/news";
     }
 

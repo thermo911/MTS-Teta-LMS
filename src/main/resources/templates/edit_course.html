@@ -80,7 +80,7 @@
                                 </tr>
                                 <tr class="table_body" th:each="module:${modules}">
                                     <td th:text="${module.id}">1</td>
-                                    <td th:text="${module.title}">Верстка</td>
+                                    <td><a th:href="@{/admin/modules/{module_id}(module_id = ${module.id})}" th:text="${module.title}">Верстка</a></td>
                                     <td>
                                         <form th:method="delete" th:action="@{/admin/modules/{id}(id = ${module.id})}">
                                             <button type="submit" class="button fiolet">Удалить</button>

@@ -9,7 +9,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.validator.internal.xml.config.ValidationXmlParser;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -36,14 +36,14 @@ public class News {
     private Set<Tag> tags;
 
     @Column
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "created_by_id")
     private User createdBy;
 
     @Column
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "updated_by_id")
@@ -66,4 +66,7 @@ public class News {
         return Objects.hash(id);
     }
 
+
 }
+
+

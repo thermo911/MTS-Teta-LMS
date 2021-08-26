@@ -56,7 +56,7 @@
                                 </tr>
                                 <tr class="table_body" th:each="topic:${topics}">
                                     <td th:text="${topic.id}">1</td>
-                                    <td th:text="${topic.title}">Верстка</td>
+                                    <td><a th:href="@{/admin/topics/{topic_id}(topic_id = ${topic.id})}" th:text="${topic.title}">Верстка</a></td>
                                     <td>
                                         <form th:method="delete" th:action="@{/admin/topics/{id}(id = ${topic.id})}">
                                             <button type="submit" class="button fiolet">Удалить</button>
