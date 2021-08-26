@@ -20,10 +20,14 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "name", unique = true)
     private String name;
 
-    @ManyToMany
+    public Tag(String name) {
+        this.name = name;
+    }
+
+    @ManyToMany(cascade = CascadeType.ALL)
     private Set<News> news;
 
     @Override

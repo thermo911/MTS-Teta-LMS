@@ -30,8 +30,8 @@ public class CourseListerService {
         return courseRepository.findById(courseId).orElseThrow(() -> new CourseNotFoundException(courseId));
     }
 
-    public void save(Course module) {
-        courseRepository.save(module);
+    public void save(Course course) {
+        courseRepository.save(course);
     }
 
     public void deleteById(Long id) {
