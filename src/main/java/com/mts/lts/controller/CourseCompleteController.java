@@ -1,9 +1,7 @@
 package com.mts.lts.controller;
 
-import com.mts.lts.domain.Course;
+import com.mts.lts.domain.*;
 import com.mts.lts.domain.Module;
-import com.mts.lts.domain.Topic;
-import com.mts.lts.domain.User;
 import com.mts.lts.mapper.CourseMapper;
 import com.mts.lts.mapper.ModuleMapper;
 import com.mts.lts.mapper.TopicMapper;
@@ -11,6 +9,7 @@ import com.mts.lts.mapper.UserMapper;
 import com.mts.lts.service.*;
 import com.mts.lts.service.exceptions.ResourceNotFoundException;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -68,6 +67,26 @@ public class CourseCompleteController {
         return "courses";
     }
 
+    @GetMapping("/{id}/avatar")
+    @ResponseBody
+    public ResponseEntity<byte[]> coverImage(
+            @PathVariable("id") Long courseId
+    ) throws ResourceNotFoundException {
+        Course course = courseListerService.findById(courseId);
+        if (course.getCoverImage() == null) {
+            course.setCoverImage(new Image(
+                    null, "image/jpeg", "default_cover.jpeg"
+            ));
+        }
+        byte[] data = imageStorageService.getImageData(course.getCoverImage())
+                .orElseThrow(ResourceNotFoundException::new);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType(
+                        course.getCoverImage()
+                                .getContentType())
+                ).body(data);
+    }
 
     @GetMapping("/courses/{id}")
     @Transactional
