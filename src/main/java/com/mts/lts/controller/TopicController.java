@@ -18,8 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import static com.mts.lts.Constants.PREF_ADMIN_MODULES;
+import static com.mts.lts.Constants.PREF_ADMIN_TOPICS;
+
 @Controller
-@RequestMapping("/topics")
+@RequestMapping(PREF_ADMIN_TOPICS)
 public class TopicController {
 
     private final TopicListerService topicListerService;
@@ -33,8 +36,7 @@ public class TopicController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/new")
-    public String topicForm(Model model, @RequestParam(value = "moduleId", required = true) long moduleId,
-                            HttpServletRequest request) {
+    public String topicForm(Model model, @RequestParam(value = "moduleId", required = true) long moduleId) {
         model.addAttribute("moduleId", moduleId);
         model.addAttribute("topicDto", new TopicDto(moduleId));
         return "edit_topic";
@@ -61,7 +63,7 @@ public class TopicController {
         }
         Topic topic = topicMapper.dtoToDomain(topicDto);
         topicListerService.save(topic);
-        return "redirect:/modules/" + topicDto.getModuleId();
+        return String.format("redirect:%s/%d", PREF_ADMIN_MODULES, topicDto.getModuleId());
     }
 
     @Secured("ROLE_ADMIN")
@@ -70,7 +72,7 @@ public class TopicController {
     public String deleteTopic(@PathVariable("id") Long id) {
         Long moduleId = topicListerService.findById(id).getModule().getId();
         topicListerService.deleteById(id);
-        return "redirect:/modules/" + moduleId;
+        return String.format("redirect:%s/%d", PREF_ADMIN_MODULES, moduleId);
     }
 
     @ExceptionHandler

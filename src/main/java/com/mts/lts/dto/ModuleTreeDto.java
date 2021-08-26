@@ -1,38 +1,39 @@
 package com.mts.lts.dto;
 
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 import java.util.Objects;
 
-@NoArgsConstructor
-@Setter
 @Getter
-public class TopicDto {
-
+@Setter
+@NoArgsConstructor
+public class ModuleTreeDto {
     private Long id;
 
-    @NotBlank(message = "Lesson title has to be filled")
+    @NotBlank(message = "Course title has to be filled")
     private String title;
 
-    @NotBlank(message = "Lesson text has to be filled")
-    private String text;
+    private List<TopicItemDto> topics;
 
-
-    private Long moduleId;
-
-
-    public TopicDto(Long moduleId) {
-        this.moduleId = moduleId;
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TopicItemDto{
+        private Long id;
+        private String title;
     }
 
-    public TopicDto(Long id, String title, String text, Long moduleId) {
+    public ModuleTreeDto(Long id, String title, List<TopicItemDto> topics) {
         this.id = id;
         this.title = title;
-        this.text = text;
-        this.moduleId = moduleId;
+        this.topics = topics;
     }
 
     @Override
@@ -43,8 +44,8 @@ public class TopicDto {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TopicDto topicDto = (TopicDto) o;
-        return Objects.equals(id, topicDto.id);
+        ModuleTreeDto moduleDto = (ModuleTreeDto) o;
+        return Objects.equals(id, moduleDto.id);
     }
 
     @Override

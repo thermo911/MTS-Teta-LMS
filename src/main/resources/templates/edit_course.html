@@ -7,12 +7,18 @@
   <link rel="stylesheet" href="https://unpkg.com/flexboxgrid2@7.2.1/flexboxgrid2.min.css">
   <link rel="stylesheet" th:href="@{/style_window.css}">
   <link rel="stylesheet" media="screen and (max-width:576px) and (min-width:320px)" th:href="@{/style_window.css}">
+
 </head>
 <body>
     <div class="page">
         <div class="container">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <form th:object="${courseDto}" th:method="post" th:action="@{/courses}">
+
+                <div class="row">
+                    <a class="close" th:href="@{/admin/courses}"><button ><img src="/pictures/крестик.svg"></button></a>
+                </div>
+
+                <form th:object="${courseDto}" th:method="post" th:action="@{/admin/courses}">
                     <div class="row">
                         <div class="title_form">
                             <label>Информация о курсе</label>
@@ -45,23 +51,22 @@
                         </div>
                     </div>
                 </form>
-                <form th:method="post" th:action="@{/courses/{course_id}/avatar (course_id = ${courseDto.id})}" enctype="multipart/form-data">
-                <div class="row" th:unless="${courseDto.id == null}">
-
-                        <div class="file">
-                            <div class="label_input">Обложка</div>
-                                <div class="file_upload form_input">
-                                    <div>Файл</div>
-                                    <button>Выбрать</button>
-                                    <input type="file" name="cover">
-                                </div>
-                        </div>
-                    </div>
+                <form th:method="post" th:action="@{/admin/courses/{course_id}/avatar (course_id = ${courseDto.id})}" enctype="multipart/form-data">
                     <div class="row" th:unless="${courseDto.id == null}">
-                        <div class="button_save">
-                            <button type="submit" class="button fiolet">Обновить</button>
+                            <div class="file">
+                                <div class="label_input">Обложка</div>
+                                    <div class="file_upload form_input">
+                                        <div>Файл</div>
+                                        <button>Выбрать</button>
+                                        <input type="file" name="cover">
+                                    </div>
+                            </div>
                         </div>
-                    </div>
+                        <div class="row" th:unless="${courseDto.id == null}">
+                            <div class="button_save">
+                                <button type="submit" class="button fiolet">Обновить</button>
+                            </div>
+                        </div>
                 </form>
                 <div th:unless="${modules == null}">
                     <div class="table_block">
@@ -77,7 +82,7 @@
                                     <td th:text="${module.id}">1</td>
                                     <td th:text="${module.title}">Верстка</td>
                                     <td>
-                                        <form th:method="delete" th:action="@{/modules/{id}(id = ${module.id})}">
+                                        <form th:method="delete" th:action="@{/admin/modules/{id}(id = ${module.id})}">
                                             <button type="submit" class="button fiolet">Удалить</button>
                                         </form>
                                     </td>
@@ -90,7 +95,7 @@
                     </div>
                     <div class="row" >
                         <div class="button_save">
-                            <a th:href="@{/modules/new (courseId = ${courseDto.id})}">
+                            <a th:href="@{/admin/modules/new (courseId = ${courseDto.id})}">
                                 <input type="hidden" name="course_id" th:value="${courseDto.id}"/>
                                 <button type="submit" class="button fiolet">Добавить</button>
                             </a>
@@ -101,22 +106,13 @@
                     <div class="label_input">Содержание</div>
                     <div class="tree">
                         <ul class="treeline">
-                            <li>Введение в JavaScript
+                            <li th:each="module:${moduleTreeTree}">
+                                <div th:text="${module.getTitle()}"></div>
+
                                 <ul>
-                                    <li>История языка</li>
-                                    <li>Внедрение языка, структура программ, комментарии</li>
-                                </ul>
-                            </li>
-                            <li>Стандартные объекты JavaScript
-                                <ul>
-                                    <li>Функции</li>
-                                    <li>Объекты</li>
-                                </ul>
-                            </li>
-                            <li>Работа с HTML
-                                <ul>
-                                    <li>DOM-дерево</li>
-                                    <li>JQuery</li>
+                                    <li th:each="topic:${module.getTopics()}">
+                                        <div th:text="${topic.getTitle()}"></div>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -137,9 +133,9 @@
                                 </tr>
                                 <tr class="table_body" th:each="user:${users}">
                                     <td th:text="${user.id}"></td>
-                                    <td th:text="${user.username}"></td>
+                                    <td th:text="${user.email}"></td>
                                     <td>
-                                        <form th:method="post" th:action="@{/courses/{id}/unassign(id = ${courseDto.id})}">
+                                        <form th:method="post" th:action="@{/admin/courses/{id}/unassign(id = ${courseDto.id})}">
                                             <input type="hidden" th:name="userId" th:value="${user.id}">
                                             <button type="submit" class="button fiolet">Снять с курса</button>
                                         </form>
@@ -160,5 +156,5 @@
             </div>
         </div>
     </div>
-    <script src="../script.js"></script>
+    <script th:src="@{/script.js}"></script>
 </body>

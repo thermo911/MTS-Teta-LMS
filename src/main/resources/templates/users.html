@@ -33,7 +33,7 @@
                         <a th:href="@{/admin/users/{id}(id=${user.id})}">
                             <div class="card">
                                 <img th:src="@{/users/{id}/avatar (id=${user.id})}">
-                                <h3 class="course_title" th:text="${user.username}">Имя пользователя</h3>
+                                <h3 class="course_title" th:text="${user.email}">Имя пользователя</h3>
                                 <form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/admin/users/{id} (id = ${user.id})}">
                                     <button type="submit" class="button fiolet">Удалить</button>
                                 </form>
