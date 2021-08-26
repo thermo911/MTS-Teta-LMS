@@ -93,6 +93,7 @@ public class CourseCompleteController {
     }
 
     @GetMapping("/courses/{course_id}/modules/{module_id}")
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     public String lessonPage(Model model, @PathVariable("module_id") Long moduleId,
                              @RequestParam("step") Integer step,
@@ -112,6 +113,7 @@ public class CourseCompleteController {
     }
 
     @GetMapping("/courses/{course_id}/modules/{module_id}/topics/{topic_id}")
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     public String lessonPage(Model model, @PathVariable("course_id") Long courseId,
                       @PathVariable("module_id") Long moduleId,
@@ -128,6 +130,7 @@ public class CourseCompleteController {
     }
 
     @GetMapping("/courses/{course_id}/modules/{module_id}/complete")
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     public String completeLesson(Model model,
                                  @PathVariable("course_id") Long courseId,

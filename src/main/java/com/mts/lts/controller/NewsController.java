@@ -44,6 +44,7 @@ public class NewsController {
         return "news";
     }
 
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN"})
     @GetMapping("/{id}")
     public String newsForm(Model model, @PathVariable("id") Long id) {
         News news = newsListerService.findById(id);
@@ -51,7 +52,7 @@ public class NewsController {
         return "edit_news";
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN"})
     @GetMapping("/new")
     public String newsForm(Model model) {
         model.addAttribute("news", new NewsDto());
@@ -59,7 +60,7 @@ public class NewsController {
     }
 
 
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_TEACHER", "ROLE_ADMIN"})
     @Transactional
     @PostMapping
     public String submitNewsForm(@Valid NewsDto newsDto, BindingResult bindingResult, Authentication authentication) {
