@@ -435,6 +435,11 @@ ul li:hover .submenu {
     display:flex;
 }
 
+.course_tree p {
+    margin:10px;
+
+}
+
 .treeline, .treeline ul, .treeline li {
     margin:0px; 
     padding: 0; 

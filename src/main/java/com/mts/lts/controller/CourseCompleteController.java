@@ -85,6 +85,10 @@ public class CourseCompleteController {
                 "moduleTreeTree",
                 moduleMapper.listDomainToModuleTreeDtoList(moduleListerService.findByCourseId(course.getId()))
         );
+        model.addAttribute(
+                "stat",
+                String.format("Пройдено %d уроков из %d!", completed, total)
+        );
         return "course_page";
     }
 

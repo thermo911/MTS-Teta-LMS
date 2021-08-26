@@ -60,6 +60,8 @@
                                 <a th:href = "@{/admin/courses/{id}/assign(id = ${course.id})}" sec:authorize="isAuthenticated()">
                                     <button type="submit" class="button blue">Назначить</button>
                                 </a>
+
+
                                 <a th:href="@{/admin/courses/{id}(id = ${course.id})}" sec:authorize="hasRole('ADMIN')">
                                     <button class="settings" type="submit"></button>
                                 </a>
