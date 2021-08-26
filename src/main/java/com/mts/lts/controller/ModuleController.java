@@ -19,8 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import static com.mts.lts.Constants.PREF_ADMIN_COURSES;
+import static com.mts.lts.Constants.PREF_ADMIN_MODULES;
+
 @Controller
-@RequestMapping("/modules")
+@RequestMapping(PREF_ADMIN_MODULES)
 public class ModuleController {
 
         private final ModuleListerService moduleListerService;
@@ -69,15 +72,16 @@ public class ModuleController {
                 return "edit_module";
             }
             moduleListerService.save(moduleMapper.dtoToDomain(moduleDto));
-            return String.format("redirect:/courses/%d", moduleDto.getCourseId());
+            return String.format("redirect:%s/%d",PREF_ADMIN_COURSES, moduleDto.getCourseId());
         }
 
 
         @Secured("ROLE_ADMIN")
         @DeleteMapping("/{id}")
         public String deleteModule(@PathVariable("id") Long id) {
+            Long courseId = moduleListerService.findById(id).getCourse().getId();
             moduleListerService.deleteById(id);
-            return "redirect:/courses";//перенаправление на страничку редактирования курса
+            return String.format("redirect:%s/%d",PREF_ADMIN_COURSES, courseId);
         }
 
         @ExceptionHandler

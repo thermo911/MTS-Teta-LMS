@@ -11,11 +11,11 @@
 <body>
     <div class="container">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <form class="window" th:object="${topicDto}" th:action="@{/topics}" th:method="post">
+            <form class="window" th:object="${topicDto}" th:action="@{/admin/topics}" th:method="post">
                 <input type="hidden" th:field="*{id}">
                 <input type="hidden" th:field="*{moduleId}">
                 <div class="row">
-                    <a class="close" th:href="@{/modules/{moduleId} (moduleId = *{moduleId})}"><button ><img src="/pictures/крестик.svg"></button></a>
+                    <a class="close" th:href="@{/admin/modules/{moduleId} (moduleId = *{moduleId})}"><button ><img src="/pictures/крестик.svg"></button></a>
                 </div>
                 <div class="row">
                     <div class="title_form">

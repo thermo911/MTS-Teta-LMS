@@ -5,8 +5,14 @@ import com.mts.lts.dto.NewsDto;
 import com.mts.lts.service.NewsListerService;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 @Component
 public class NewsMapper extends AbstractMapper<NewsDto, News, NewsListerService> {
+    private static DateTimeFormatter dateTimeFormatter =  DateTimeFormatter.ofPattern("dd MMMM yyyy год")
+            .withLocale(new Locale("ru"));
 
     public NewsMapper(NewsListerService entityService) {
         super(entityService);
@@ -23,7 +29,6 @@ public class NewsMapper extends AbstractMapper<NewsDto, News, NewsListerService>
         }
         news.setTitle(entityDto.getTitle());
         news.setText(entityDto.getText());
-        news.setUpdatedAt(null); //todo: текущее время
         news.setTags(entityDto.getTags());
 
         return news;
@@ -35,7 +40,8 @@ public class NewsMapper extends AbstractMapper<NewsDto, News, NewsListerService>
                 entity.getId(),
                 entity.getTitle(),
                 entity.getText(),
-                entity.getUpdatedAt(),
+                dateTimeFormatter.format(entity.getUpdatedAt()),
+                entity.getUpdatedBy(),
                 entity.getTags()
         );
     }

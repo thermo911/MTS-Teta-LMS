@@ -1,13 +1,12 @@
 package com.mts.lts.dto;
 
+import com.mts.lts.domain.Role;
 import com.mts.lts.domain.Tag;
+import com.mts.lts.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.sql.Date;
 import java.util.Objects;
 import java.util.Set;
 
@@ -22,9 +21,20 @@ public class NewsDto {
 
     private String text;
 
-    private Date updatedAt;
+    private String updatedAt;
+
+    private User updatedBy;
 
     private Set<Tag> tags;
+
+    public NewsDto(Long id, String title, String text, Set<Tag> tags, User updatedBy) {
+        this.id = id;
+        this.title = title;
+        this.text = text;
+        this.tags = tags;
+        this.updatedBy = updatedBy;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -44,4 +54,7 @@ public class NewsDto {
     }
 
 }
+
+
+
 

@@ -41,11 +41,14 @@
 
                         <div class="content" th:text="${news.getTitle()}">Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel assumenda dolor autem esse totam possimus dolorem odit. Itaque explicabo iste nulla quaerat illo, consequatur veniam ab quas molestias doloribus vel. consectetur adipisicing elit. Asperiores recusandae, ut nam, explicabo id officiis, harum esse deserunt laboriosam aspernatur vitae rem facere quas dolore culpa saepe similique neque officia.</div>
                         <div class="content" th:text="${news.getText()}">Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel assumenda dolor autem esse totam possimus dolorem odit. Itaque explicabo iste nulla quaerat illo, consequatur veniam ab quas molestias doloribus vel. consectetur adipisicing elit. Asperiores recusandae, ut nam, explicabo id officiis, harum esse deserunt laboriosam aspernatur vitae rem facere quas dolore culpa saepe similique neque officia.</div>
+                        <div class="date" th:text="${news.getUpdatedAt()}">21 августа 2021 год</div>
                         <div class="info_news">
-                            <div class="date">21.08.21</div>
+
                             <div class="author">
-                                <div>Иванов А.А.</div>
-                                <small>- учитель</small>
+                                <div th:text="${news.getUpdatedBy().getEmail()}">Иванов А.А.</div>
+                                <div th:each="role : ${news.getUpdatedBy().getRoles()}"
+                                        th:text="${role.name}">
+                                </div>
                             </div>
                         </div>
                     </div>

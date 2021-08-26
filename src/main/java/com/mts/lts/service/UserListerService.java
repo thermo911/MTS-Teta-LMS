@@ -73,7 +73,7 @@ public class UserListerService implements FieldValueExists {
             throws UnsupportedOperationException {
         Assert.notNull(fieldName, "Field name must be provided for unique value validation");
 
-        if (!fieldName.equals("username")) {
+        if (!fieldName.equals("email")) {
             throw new UnsupportedOperationException("Field name not supported");
         }
 
