@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +15,7 @@
     <main th:object="${courseDto}">
         <div style="width:99.5%;">
             <div class="row">
-                <div class="img_course"><img class="img_course" th:src="@{/admin/courses/{id}/avatar (id = ${courseDto.getId()})}"></div>
+                <div class="img_course"><img class="img_course" th:src="@{/courses/{id}/avatar (id = ${courseDto.getId()})}"></div>
              </div>
         </div>
         <div class="container">
@@ -48,18 +49,28 @@
                          </ul>
                     </div>
                 </div>
-                <div class="row">
-                    <div style="width: 100%;">
-                        <a href="edit_module.html"><button class="button blue plus2" style="float:right"></button></a>
-                    </div>
-                </div>
-                <div class="table_block">
+<!--                <div class="row">-->
+<!--                    <div style="width: 100%;">-->
+<!--                        <a href="edit_module.html"><button class="button blue plus2" style="float:right"></button></a>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="table_block" th:if="${assigned}">
                     <div class="label">Прогресс</div>
                     <div  class="course_tree">
                          <p class="padd" th:text="${stat}">fsdfdsfdsf</p>
                     </div>
                 </div>
-
+                <div sec:authorize="!hasRole('ADMIN')" class="table_block">
+                    <div class="label">Обучение</div>
+                    <a th:unless="${assigned}"
+                       th:href = "@{/courses/{id}/assign(id = ${courseDto.id})}">
+                        <button type="submit" class="button blue">Учиться!</button>
+                    </a>
+                    <a th:if="${assigned}"
+                       th:href = "@{/courses/{id}/unassign(id = ${courseDto.id})}">
+                        <button type="submit" class="button blue">Покинуть курс</button>
+                    </a>
+                </div>
             </div>
         </div>
     </main>

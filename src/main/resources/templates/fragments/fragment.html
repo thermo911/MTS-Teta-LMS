@@ -15,7 +15,7 @@
             </div>
           </div>
           <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-            <div class="courses">
+            <div class="courses" sec:authorize="hasRole('ADMIN')">
               <a th:href="@{/admin/courses}"><img th:src="@{/pictures/icons8-курсы-96 2.png}"></a>
             </div>
           </div>

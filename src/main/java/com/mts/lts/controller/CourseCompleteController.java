@@ -30,9 +30,10 @@ public class CourseCompleteController {
     private final UserListerService userListerService;
     private final CourseMapper courseMapper;
     private final ModuleMapper moduleMapper;
-    private final UserMapper userMapper;
     private final TopicMapper topicMapper;
     private final CourseCompletionService courseCompletionService;
+    private final ImageStorageService imageStorageService;
+    private final CourseAssignService courseAssignService;
 
     public CourseCompleteController(CourseListerService courseListerService,
                                     ModuleListerService moduleListerService,
@@ -40,18 +41,20 @@ public class CourseCompleteController {
                                     UserListerService userListerService,
                                     CourseMapper courseMapper,
                                     ModuleMapper moduleMapper,
-                                    UserMapper userMapper,
                                     TopicMapper topicMapper,
-                                    CourseCompletionService courseCompletionService) {
+                                    CourseCompletionService courseCompletionService,
+                                    ImageStorageService imageStorageService,
+                                    CourseAssignService courseAssignService) {
         this.courseListerService = courseListerService;
         this.moduleListerService = moduleListerService;
         this.topicListerService = topicListerService;
         this.userListerService = userListerService;
         this.courseMapper = courseMapper;
         this.moduleMapper = moduleMapper;
-        this.userMapper = userMapper;
         this.topicMapper = topicMapper;
         this.courseCompletionService = courseCompletionService;
+        this.imageStorageService = imageStorageService;
+        this.courseAssignService = courseAssignService;
     }
 
     @GetMapping("/courses")
@@ -67,7 +70,7 @@ public class CourseCompleteController {
         return "courses";
     }
 
-    @GetMapping("/{id}/avatar")
+    @GetMapping("courses/{id}/avatar")
     @ResponseBody
     public ResponseEntity<byte[]> coverImage(
             @PathVariable("id") Long courseId
@@ -97,6 +100,7 @@ public class CourseCompleteController {
         Course course = courseListerService.findById(id);
         Integer completed = courseCompletionService.countTopicsCompletedByUser(user, course);
         Integer total = courseCompletionService.countTopicsForCourse(course);
+        model.addAttribute("assigned", user.getCourses().contains(course));
         model.addAttribute("completed_by_user", completed);
         model.addAttribute("total_topics", total);
         model.addAttribute("courseDto", courseMapper.domainToDto(course));
@@ -164,6 +168,24 @@ public class CourseCompleteController {
         topicListerService.save(topic);
 
         return String.format("redirect:/courses/%d/modules/%d/topics/%d", courseId, moduleId, topicId);
+    }
+
+    @GetMapping("/courses/{id}/assign")
+    @PreAuthorize("isAuthenticated")
+    public String selfAssign(@PathVariable("id") Long courseId,
+                             Authentication auth) {
+        User user = userListerService.findByEmail(auth.getName());
+        courseAssignService.assignToCourse(user.getId(), courseId);
+        return String.format("redirect:/courses/%d", courseId);
+    }
+
+    @GetMapping("/courses/{id}/unassign")
+    @PreAuthorize("isAuthenticated")
+    public String selfUnassign(@PathVariable("id") Long courseId,
+                             Authentication auth) {
+        User user = userListerService.findByEmail(auth.getName());
+        courseAssignService.unassignToCourse(user.getId(), courseId);
+        return String.format("redirect:/courses/%d", courseId);
     }
 
     @ExceptionHandler
