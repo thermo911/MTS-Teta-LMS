@@ -70,7 +70,7 @@ public class CourseCompleteController {
         return "courses";
     }
 
-    @GetMapping("/{id}/avatar")
+    @GetMapping("courses/{id}/avatar")
     @ResponseBody
     public ResponseEntity<byte[]> coverImage(
             @PathVariable("id") Long courseId

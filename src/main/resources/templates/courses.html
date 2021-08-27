@@ -52,7 +52,7 @@
                     <div class="col-lg-4 col-md-6 col-xs-12" th:unless="${courses.empty}" th:each="course:${courses}">
                         <a th:href="@{/courses/{id}(id=${course.id})}">
                             <div class="card">
-                                <img th:src="@{/admin/courses/{course_id}/avatar (course_id = ${course.id})}">
+                                <img th:src="@{/courses/{course_id}/avatar (course_id = ${course.id})}">
                                 <h3 class="course_title" th:text="${course.getTitle()}">Название курса</h3>
                                 <h4 class="course_author" th:text="${course.getAuthor()}">Автор</h4>
                                 <form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/admin/courses/{id}(id = ${course.id})}">
