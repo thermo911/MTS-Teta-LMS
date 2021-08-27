@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!--th:replace="fragments/header :: header"-->
 <head>
   <meta charset="UTF-8">
@@ -57,8 +58,11 @@
                                 <form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/admin/courses/{id}(id = ${course.id})}">
                                     <button type="submit" class="button fiolet">Удалить</button>
                                 </form>
-                                <a th:href = "@{/admin/courses/{id}/assign(id = ${course.id})}" sec:authorize="isAuthenticated()">
+                                <a sec:authorize="hasRole('ADMIN')" th:href = "@{/admin/courses/{id}/assign(id = ${course.id})}">
                                     <button type="submit" class="button blue">Назначить</button>
+                                </a>
+                                <a sec:authorize="!hasRole('ADMIN')" th:href = "@{/courses/{id}/assign(id = ${course.id})}">
+                                    <button type="submit" class="button blue">Учиться!</button>
                                 </a>
 
 
