@@ -72,6 +72,9 @@ public class User {
     private String socialNetworks;
 //    private List<String> socialNetworks;
 
+    @ManyToMany(mappedBy = "usersWhoCompleted", cascade = CascadeType.ALL)
+    private Set<Topic> completedTopics;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

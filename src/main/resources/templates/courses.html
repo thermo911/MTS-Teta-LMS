@@ -54,12 +54,14 @@
                                 <img th:src="@{/admin/courses/{course_id}/avatar (course_id = ${course.id})}">
                                 <h3 class="course_title" th:text="${course.getTitle()}">Название курса</h3>
                                 <h4 class="course_author" th:text="${course.getAuthor()}">Автор</h4>
-                                <form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/courses/{id}(id = ${course.id})}">
+                                <form sec:authorize="hasRole('ADMIN')" th:method="delete" th:action="@{/admin/courses/{id}(id = ${course.id})}">
                                     <button type="submit" class="button fiolet">Удалить</button>
                                 </form>
                                 <a th:href = "@{/admin/courses/{id}/assign(id = ${course.id})}" sec:authorize="isAuthenticated()">
                                     <button type="submit" class="button blue">Назначить</button>
                                 </a>
+
+
                                 <a th:href="@{/admin/courses/{id}(id = ${course.id})}" sec:authorize="hasRole('ADMIN')">
                                     <button class="settings" type="submit"></button>
                                 </a>
